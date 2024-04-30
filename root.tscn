@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cw4wwuxjartg5"]
+
+[ext_resource type="Script" path="res://movement.gd" id="1_rqp6g"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_74sht"]
+albedo_color = Color(1, 1, 0.137255, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_wfym5"]
+material = SubResource("StandardMaterial3D_74sht")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jxgom"]
+
+[node name="root" type="Node3D"]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("1_rqp6g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("SphereMesh_wfym5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("SphereShape3D_jxgom")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.47857)
