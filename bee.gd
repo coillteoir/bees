@@ -12,7 +12,7 @@ var movements: Array[Callable] = []
 const MAX_SPEED: float = 1.0
 const MAX_FORCE: float = 10.0
 
-var mass = 1
+const mass = 1
 var vel: Vector3 = Vector3.ZERO
 var force: Vector3 = Vector3.ZERO
 var acceleration: Vector3 = Vector3.ZERO
@@ -23,15 +23,16 @@ var target = null
 #Noise Wander Vars
 enum Axis { Horizontal, Vertical}
 
+const WANDER_AMP = 2000
+const WANDER_DIST = 5
+const AXIS = Axis.Horizontal
+const WANDER_FREQ = 0.3
+const WANDER_RADIUS = 10.0
+
+var theta = 0
 var wanderTarget:Vector3
-var theta = 50
-var amplitude = 200
-var distance = 5
-var noise:FastNoiseLite = FastNoiseLite.new()
-var axis = Axis.Horizontal
-var frequency = 0.3
-var radius = 10.0
 var world_target:Vector3
+var noise:FastNoiseLite = FastNoiseLite.new()
 
 func _closest_flower() -> Vector3:
 	return Vector3(0, 0, 0)
@@ -54,17 +55,18 @@ func _arrive() -> Vector3:
 	return desiredVel - vel #returns steering force		
 	
 func _noiseWander() -> Vector3:
-	var n  = noise.get_noise_1d(theta)
-	print(n)
+	var n  = noise.get_noise_1d(theta) #get noise value for current theta
 	
-	var angle = deg_to_rad(n * amplitude)
+	var angle = deg_to_rad(n * WANDER_AMP) 
 	
 	var delta = get_process_delta_time()
 
 	var rot = global_transform.basis.get_euler()
 	
 	rot.x = 0
-	if axis == Axis.Horizontal:
+	
+	#Calculate wander vector
+	if AXIS == Axis.Horizontal:
 		wanderTarget.x = sin(angle)
 		wanderTarget.y = 0
 		wanderTarget.z =  cos(angle)		
@@ -74,14 +76,15 @@ func _noiseWander() -> Vector3:
 		wanderTarget.y = sin(angle)
 		wanderTarget.z = cos(angle)		
 		
-	wanderTarget *= radius
+	wanderTarget *= WANDER_RADIUS #scale wander target by radius
 
-	var local_target = wanderTarget + (Vector3.BACK * distance)
+
+	var local_target = wanderTarget + (Vector3.BACK * WANDER_DIST)
 	
 	var projected = Basis.from_euler(rot)
 	
 	world_target = global_transform.origin + (projected * local_target)	
-	theta += frequency * delta * PI * 2.0
+	theta += WANDER_FREQ * delta * PI * 2.0
 	
 	var toTarget = world_target - global_transform.origin
 	toTarget = toTarget.normalized()
