@@ -1,15 +1,13 @@
 extends CharacterBody3D
 
-#Behaviours
-@export var forward: bool = false
-@export var closest: bool = false
-@export var arrive: bool = false
-@export var noiseWander: bool = true
-
 var movements: Array[Callable] = []
 
 #Boid properties
-const MAX_SPEED: float = 1.0
+enum Status {Wandering, Arriving}
+var status:Status
+
+const MAX_DIST_FROM_HIVE = 20
+
 const MAX_FORCE: float = 10.0
 
 const mass = 1
@@ -17,8 +15,12 @@ var vel: Vector3 = Vector3.ZERO
 var force: Vector3 = Vector3.ZERO
 var acceleration: Vector3 = Vector3.ZERO
 var speed: float
+var max_speed:float
 
-var target: Node3D = null
+#Arrive vars
+var arriveTarget: Node3D = null
+const ARRIVE_MAX_SPEED = 10
+const SLOWING_DISTANCE = 30
 
 
 #Noise Wander Vars
@@ -29,32 +31,29 @@ const WANDER_DIST = 5
 const AXIS = Axis.Horizontal
 const WANDER_FREQ = 0.3
 const WANDER_RADIUS = 10.0
+const WANDER_MAX_SPEED = 1.0
 
 var theta = 0
 var wanderTarget:Vector3
 var world_target:Vector3
 var noise:FastNoiseLite = FastNoiseLite.new()
 
-func _closest_flower() -> Vector3:
-	return Vector3(0, 0, 0)
-
-
-func _forward() -> Vector3:
-	return Vector3(0, 0, MAX_SPEED)
-
+#Scene nodes 
+var hive:Node3D
+var testTarget:Node3D
 
 func _arrive() -> Vector3:
-	const SLOWING_DISTANCE = 50
+
 	#get vector to target
-	var toTarget = target.global_transform.origin - global_transform.origin
+	var toTarget = arriveTarget.global_transform.origin - global_transform.origin
 	var distToTarget = toTarget.length()  #get distance to target
 
 	if distToTarget < 2:  #if distance is less than 2, stop
 		return Vector3.ZERO
 		
-	var rampedSpeed = (distToTarget / SLOWING_DISTANCE) * MAX_SPEED #sets speed based on ratio between dist and slowingDistance, scaled to max_speed
+	var rampedSpeed = (distToTarget / SLOWING_DISTANCE) * max_speed #sets speed based on ratio between dist and slowingDistance, scaled to max_speed
 	
-	var limitedSpeed = min(MAX_SPEED, rampedSpeed) #Limit speed
+	var limitedSpeed = min(max_speed, rampedSpeed) #Limit speed
 	var desiredVel = (toTarget * limitedSpeed) / distToTarget #desired velcity vector to get to target
 	return desiredVel - vel #returns steering force		
 	
@@ -91,25 +90,32 @@ func _noiseWander() -> Vector3:
 	
 	var toTarget = world_target - global_transform.origin
 	toTarget = toTarget.normalized()
-	var desired = toTarget * MAX_SPEED
+	var desired = toTarget * max_speed
 	return desired - vel
-		
-func _init():
-	if forward:
-		movements.append(_forward)
-	if closest:
-		movements.append(_closest_flower)
-	if arrive:
-		movements.append(_arrive)
-	if noiseWander:
-		movements.append(_noiseWander)
+
+func setStatusArrive(target):
+	status = Status.Arriving
+	movements.clear()
+	movements.append(_arrive)
+	arriveTarget = target
+	max_speed = ARRIVE_MAX_SPEED;
+	
+func setStatusWander():
+	status = Status.Wandering
+	
+	var rng = RandomNumberGenerator.new()
+	theta = rng.randf_range(0, 10.0)
+	
+	movements.clear()
+	movements.append(_noiseWander)
+	max_speed = WANDER_MAX_SPEED
 		
 func _ready():
-	target = get_tree().current_scene.find_child("testTarget")
-	if noiseWander:
-		var rng = RandomNumberGenerator.new()
-		theta = rng.randf_range(0, 10.0)
-
+	#Get scene nodes 
+	testTarget = get_tree().current_scene.find_child("testTarget")
+	hive = get_parent()
+	
+	setStatusWander()
 
 func calculate() -> Vector3:
 	var forceAccumulator = Vector3.ZERO
@@ -123,8 +129,7 @@ func calculate() -> Vector3:
 
 	return forceAccumulator
 
-
-func _physics_process(delta):
+func applyForce(delta):
 	var newForce = calculate()
 
 	force = lerp(force, newForce, delta)
@@ -137,14 +142,25 @@ func _physics_process(delta):
 	speed = vel.length()
 
 	if speed > 0:
-		vel = vel.limit_length(MAX_SPEED)
+		vel = vel.limit_length(max_speed)
 
 		set_velocity(vel)
 		move_and_slide()
+	
+func _physics_process(delta):
+	if (status == Status.Wandering):	
+		var distFromHive = hive.global_transform.origin.distance_to(global_transform.origin)
+				
+		if (distFromHive > MAX_DIST_FROM_HIVE):
+			setStatusArrive(hive)
+	
+	applyForce(delta)
 
-
+"""
+# Returning to hive after going to flower
 func _on_area_3d_area_entered(area: Area3D):
 	if area == target.find_child("Area3D"):
 		print(self, " ENTERED TARGET")
 		target = get_parent()
 	pass
+"""
