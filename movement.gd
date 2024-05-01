@@ -6,6 +6,15 @@ const SPEED = 1
 
 var movements: Array[Callable] = []
 
+# SEEK_FLOWER_CHANCE = FOUND_FLOWERS/TOTAL_FLOWERS
+func _avoid() -> Vector3:
+	return Vector3(0,0,0)
+
+func _seek() -> Vector3:
+	return Vector3(0,0,0)
+
+func _wander() -> Vector3:
+	return Vector3(0,0,0)
 
 func _closest_flower() -> Vector3:
 	return Vector3(0, 0, 0)

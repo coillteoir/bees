@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [gd_scene load_steps=6 format=3 uid="uid://cw4wwuxjartg5"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
@@ -10,18 +11,26 @@ albedo_color = Color(1, 1, 0.137255, 1)
 material = SubResource("StandardMaterial3D_74sht")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jxgom"]
+=======
+[gd_scene load_steps=4 format=3 uid="uid://cw4wwuxjartg5"]
+
+[ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
+[ext_resource type="PackedScene" uid="uid://dfpco86kehmsm" path="res://bee.tscn" id="2_8dud1"]
+[ext_resource type="Script" path="res://testTarget.gd" id="3_tknvi"]
+>>>>>>> 7510f41d2f2d09e0318f570a46aa1b12f6863dde
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_bxopo")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
-script = ExtResource("1_rqp6g")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
-mesh = SubResource("SphereMesh_wfym5")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
-shape = SubResource("SphereShape3D_jxgom")
-
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.55145)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 8, 0)
+fov = 78.3484
+
+[node name="Barry" parent="." instance=ExtResource("2_8dud1")]
+
+[node name="testTarget" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.92896, 0, -3.58977)
+script = ExtResource("3_tknvi")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1829, 5.88544, 0)
