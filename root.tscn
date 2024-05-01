@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cw4wwuxjartg5"]
-[ext_resource type="PackedScene" uid="uid://7aqhehv0sjx3" path="res://hive.tscn" id="2_croj8"]
+[gd_scene load_steps=4 format=3 uid="uid://cw4wwuxjartg5"]
+
 [ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
+[ext_resource type="PackedScene" uid="uid://7aqhehv0sjx3" path="res://hive.tscn" id="2_croj8"]
 [ext_resource type="Script" path="res://testTarget.gd" id="3_tknvi"]
 
 [node name="root" type="Node3D"]
@@ -11,8 +12,6 @@ script = ExtResource("1_bxopo")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 8, 0)
 fov = 78.3484
-
-[node name="Barry" parent="." instance=ExtResource("2_8dud1")]
 
 [node name="testTarget" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.92896, 0, -3.58977)

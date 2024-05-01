@@ -7,5 +7,6 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	DebugDraw3D.draw_sphere(global_position, 0.5, Color(1,0,0))
+func _process(_delta):
+	pass
+	#DebugDraw3D.draw_sphere(global_position, 0.5, Color(1,0,0))

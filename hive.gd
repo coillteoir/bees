@@ -13,10 +13,11 @@ func _init():
 func _spawn_bee():
 	if bees.size() < BEES_MAX:
 		var bee_n = bee.instantiate()
-		bee_n.global_position.z += 1
+
+		add_child(bee_n)
+		bee_n.global_position.z += 5
 		bee_n.velocity.x = randf_range(-10, 10)
 		bee_n.velocity.y = randf_range(-10, 10)
-		add_child(bee_n)
 		bees.append(bee_n)
 
 

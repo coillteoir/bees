@@ -17,7 +17,7 @@ var force: Vector3 = Vector3.ZERO
 var acceleration: Vector3 = Vector3.ZERO
 var speed: float
 
-var target = null
+var target:Marker3D = null
 
 func _closest_flower() -> Vector3:
 	return Vector3(0, 0, 0)
@@ -48,7 +48,9 @@ func _init():
 		movements.append(_arrive)
 		
 func _ready():
-	target = $"../testTarget"
+	target = get_tree().current_scene.find_child("testTarget")
+	print(target)
+	
 	
 func calculate() -> Vector3:
 	var forceAccumulator = Vector3.ZERO
