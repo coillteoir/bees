@@ -1,8 +1,9 @@
 extends CharacterBody3D
 
-var SPEED = 1
 @export var forward: bool = true
 @export var closest: bool = true
+
+var SPEED = 1
 
 var movements: Array[Callable] = []
 
@@ -35,11 +36,13 @@ func _init():
 	if closest:
 		movements.append(_closest_flower)
 
+
 func _ready():
 	print("I am ready")
 
+
 func _physics_process(_delta):
-	var vel: Vector3 = Vector3(0, 0, 0)
+	var vel: Vector3 = velocity
 	for i in range(movements.size()):
 		vel += movements[i].call()
 	velocity = vel
