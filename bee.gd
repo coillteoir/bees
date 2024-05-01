@@ -17,7 +17,7 @@ var force: Vector3 = Vector3.ZERO
 var acceleration: Vector3 = Vector3.ZERO
 var speed: float
 
-var target: Marker3D = null
+var target: Node3D = null
 
 
 func _closest_flower() -> Vector3:
@@ -89,3 +89,10 @@ func _physics_process(delta):
 
 		set_velocity(vel)
 		move_and_slide()
+
+
+func _on_area_3d_area_entered(area: Area3D):
+	if area == target.find_child("Area3D"):
+		print(self, " ENTERED TARGET")
+		target = get_parent()
+	pass
