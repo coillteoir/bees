@@ -88,7 +88,7 @@ func _noiseWander() -> Vector3:
 	
 	world_target = global_transform.origin + (projected * local_target)	
 	theta += WANDER_FREQ * delta * PI * 2.0
-	print(theta)
+	
 	var toTarget = world_target - global_transform.origin
 	toTarget = toTarget.normalized()
 	var desired = toTarget * MAX_SPEED
