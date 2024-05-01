@@ -12,7 +12,6 @@ var flowers: Array = []
 func _init():
 	for i in range(flower_count):
 		var new_flower = flower_template.instantiate()
-
 		flowers.append(new_flower)
 		add_child(new_flower)
 
