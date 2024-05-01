@@ -18,7 +18,7 @@ script = ExtResource("1_bxopo")
 [node name="Hive" parent="." instance=ExtResource("2_croj8")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 8, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19.573, 0)
 fov = 78.3484
 
 [node name="testTarget" type="Marker3D" parent="."]
