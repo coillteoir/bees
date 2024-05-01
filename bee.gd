@@ -18,7 +18,8 @@ var force: Vector3 = Vector3.ZERO
 var acceleration: Vector3 = Vector3.ZERO
 var speed: float
 
-var target = null
+var target: Node3D = null
+
 
 #Noise Wander Vars
 enum Axis { Horizontal, Vertical}
@@ -37,15 +38,18 @@ var noise:FastNoiseLite = FastNoiseLite.new()
 func _closest_flower() -> Vector3:
 	return Vector3(0, 0, 0)
 
+
 func _forward() -> Vector3:
 	return Vector3(0, 0, MAX_SPEED)
 
+
 func _arrive() -> Vector3:
 	const SLOWING_DISTANCE = 50
-	var toTarget = target.global_transform.origin - global_transform.origin #get vector to target
-	var distToTarget = toTarget.length() #get distance to target
-	
-	if distToTarget < 2: #if distance is less than 2, stop
+	#get vector to target
+	var toTarget = target.global_transform.origin - global_transform.origin
+	var distToTarget = toTarget.length()  #get distance to target
+
+	if distToTarget < 2:  #if distance is less than 2, stop
 		return Vector3.ZERO
 		
 	var rampedSpeed = (distToTarget / SLOWING_DISTANCE) * MAX_SPEED #sets speed based on ratio between dist and slowingDistance, scaled to max_speed
@@ -102,36 +106,43 @@ func _init():
 		movements.append(_noiseWander)
 		
 func _ready():
-	target = $"../testTarget"
-	
+	target = get_tree().current_scene.find_child("testTarget")
+
+
 func calculate() -> Vector3:
 	var forceAccumulator = Vector3.ZERO
-	
+
 	for i in range(movements.size()):
 		forceAccumulator += movements[i].call()
-	
+
 	#limit force
 	if forceAccumulator.length() > MAX_FORCE:
 		forceAccumulator = force.limit_length(MAX_FORCE)
-	
+
 	return forceAccumulator
 
-func _physics_process(delta):	
+
+func _physics_process(delta):
 	var newForce = calculate()
 
 	force = lerp(force, newForce, delta)
-		
-	acceleration = force/mass
-	
+
+	acceleration = force / mass
+
 	#multiply acceleration by delta (time since last frame) to account for inconsistent framerate
-	vel += acceleration * delta 
-	
+	vel += acceleration * delta
+
 	speed = vel.length()
-	
+
 	if speed > 0:
 		vel = vel.limit_length(MAX_SPEED)
-		
+
 		set_velocity(vel)
 		move_and_slide()
-	
-	
+
+
+func _on_area_3d_area_entered(area: Area3D):
+	if area == target.find_child("Area3D"):
+		print(self, " ENTERED TARGET")
+		target = get_parent()
+	pass

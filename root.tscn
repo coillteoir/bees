@@ -1,21 +1,38 @@
-[gd_scene load_steps=4 format=3 uid="uid://cw4wwuxjartg5"]
+[gd_scene load_steps=7 format=3 uid="uid://cw4wwuxjartg5"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
-[ext_resource type="PackedScene" uid="uid://dfpco86kehmsm" path="res://bee.tscn" id="2_8dud1"]
+[ext_resource type="PackedScene" uid="uid://7aqhehv0sjx3" path="res://hive.tscn" id="2_croj8"]
 [ext_resource type="Script" path="res://testTarget.gd" id="3_tknvi"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k6kio"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_l7nd5"]
+material = SubResource("StandardMaterial3D_k6kio")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_yocmi"]
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_bxopo")
+
+[node name="Hive" parent="." instance=ExtResource("2_croj8")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19.573, 0)
 fov = 78.3484
 
-[node name="Barry" parent="." instance=ExtResource("2_8dud1")]
-
 [node name="testTarget" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.92896, 0, -3.58977)
 script = ExtResource("3_tknvi")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="testTarget"]
+mesh = SubResource("SphereMesh_l7nd5")
+skeleton = NodePath("../..")
+
+[node name="Area3D" type="Area3D" parent="testTarget"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="testTarget/Area3D"]
+shape = SubResource("SphereShape3D_yocmi")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1829, 5.88544, 0)
