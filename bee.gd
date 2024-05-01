@@ -82,14 +82,13 @@ func _noiseWander() -> Vector3:
 		
 	wanderTarget *= WANDER_RADIUS #scale wander target by radius
 
-
 	var local_target = wanderTarget + (Vector3.BACK * WANDER_DIST)
 	
 	var projected = Basis.from_euler(rot)
 	
 	world_target = global_transform.origin + (projected * local_target)	
 	theta += WANDER_FREQ * delta * PI * 2.0
-	
+	print(theta)
 	var toTarget = world_target - global_transform.origin
 	toTarget = toTarget.normalized()
 	var desired = toTarget * MAX_SPEED
@@ -107,6 +106,9 @@ func _init():
 		
 func _ready():
 	target = get_tree().current_scene.find_child("testTarget")
+	if noiseWander:
+		var rng = RandomNumberGenerator.new()
+		theta = rng.randf_range(0, 10.0)
 
 
 func calculate() -> Vector3:
