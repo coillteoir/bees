@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://dfpco86kehmsm"]
+
+[ext_resource type="Script" path="res://bee.gd" id="1_5n47l"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yl3dl"]
+albedo_color = Color(1, 1, 0.137255, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_4wo6i"]
+material = SubResource("StandardMaterial3D_yl3dl")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_p20tu"]
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+script = ExtResource("1_5n47l")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_4wo6i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_p20tu")
