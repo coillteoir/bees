@@ -17,7 +17,7 @@ func _init():
 
 
 func _ready():
-	generate_flower_coords(flower_count, flower_min_distance, flower_area, flower_hive_distance)
+	_generate_flower_coords(flower_count, flower_min_distance, flower_area, flower_hive_distance)
 
 
 
@@ -25,7 +25,7 @@ func _ready():
 # Flower oordinates are generated with at least "flower_min_distance" away from eachother
 # Flower oordinates are generated within a bounding area "flower_area"
 # Flower oordinates are generated with at least "flower_hive_distance" away from the origin (0,0)
-func generate_flower_coords(flower_count: int, flower_min_distance: float, flower_area: int, flower_hive_distance: float):
+func _generate_flower_coords(flower_count: int, flower_min_distance: float, flower_area: int, flower_hive_distance: float):
 	var points = []
 	while points.size() < flower_count:
 		var new_point = Vector2(randf_range(-flower_area, flower_area), randf_range(-flower_area, flower_area))
