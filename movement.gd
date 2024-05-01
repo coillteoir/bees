@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const SPEED = 1
+var SPEED = 1
 @export var forward: bool = true
 @export var closest: bool = true
 
@@ -29,13 +29,16 @@ func _forward() -> Vector3:
 
 
 func _init():
+	print("I am initialized")
 	if forward:
 		movements.append(_forward)
 	if closest:
 		movements.append(_closest_flower)
 
+func _ready():
+	print("I am ready")
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	var vel: Vector3 = Vector3(0, 0, 0)
 	for i in range(movements.size()):
 		vel += movements[i].call()
