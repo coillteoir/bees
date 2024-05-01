@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://cw4wwuxjartg5"]
+[gd_scene load_steps=6 format=3 uid="uid://cw4wwuxjartg5"]
 
+[ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
 [ext_resource type="Script" path="res://movement.gd" id="1_rqp6g"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_74sht"]
@@ -11,6 +12,7 @@ material = SubResource("StandardMaterial3D_74sht")
 [sub_resource type="SphereShape3D" id="SphereShape3D_jxgom"]
 
 [node name="root" type="Node3D"]
+script = ExtResource("1_bxopo")
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 script = ExtResource("1_rqp6g")
@@ -22,4 +24,4 @@ mesh = SubResource("SphereMesh_wfym5")
 shape = SubResource("SphereShape3D_jxgom")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.47857)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.55145)

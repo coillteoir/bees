@@ -1,8 +1,10 @@
 extends CharacterBody3D
 
-var SPEED: int = 1
+const SPEED = 5
+@export var forward: bool = true
 
 
 func _physics_process(delta):
-	velocity = Vector3(0, 0, 1)
+	if forward:
+		velocity = Vector3(0, 0, SPEED)
 	move_and_slide()
