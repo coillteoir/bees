@@ -37,3 +37,6 @@ Subversions denote milestones in the project, each of these must meet a level of
 - - Flower oordinates are generated with at least "flower_min_distance" away from eachother
 - - Flower oordinates are generated within a bounding area "flower_area"
 - - Flower oordinates are generated with at least "flower_hive_distance" away from the origin (0,0)
+
+- Custom Hive & Bee meshes
+- - Both meshes custom made in blender v3.6
