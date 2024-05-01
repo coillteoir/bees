@@ -7,7 +7,6 @@ albedo_color = Color(0.537255, 0.00392157, 0.796078, 1)
 material = SubResource("StandardMaterial3D_gsehy")
 
 [node name="Flower" type="Node3D"]
-script = ExtResource("1_kcg7x")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_ugt4w")
