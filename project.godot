@@ -16,4 +16,3 @@ config/features=PackedStringArray("4.2")
 [debug_draw_3d]
 
 settings/telemetry_state=1
-
