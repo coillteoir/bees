@@ -14,13 +14,13 @@ material = SubResource("StandardMaterial3D_74sht")
 [node name="root" type="Node3D"]
 script = ExtResource("1_bxopo")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="Bee" type="CharacterBody3D" parent="."]
 script = ExtResource("1_rqp6g")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bee"]
 mesh = SubResource("SphereMesh_wfym5")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Bee"]
 shape = SubResource("SphereShape3D_jxgom")
 
 [node name="Camera3D" type="Camera3D" parent="."]
