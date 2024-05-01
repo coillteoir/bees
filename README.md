@@ -30,3 +30,10 @@ Subversions denote milestones in the project, each of these must meet a level of
 - Graphical fidelity up to high standard for features
 - UI/Editor Exports allows decent control over features
 - CI passing
+
+# Completed
+- Spawning flowers on init
+- - "flower_count" decides the number of flower that should be spawned.
+- - Flower oordinates are generated with at least "flower_min_distance" away from eachother
+- - Flower oordinates are generated within a bounding area "flower_area"
+- - Flower oordinates are generated with at least "flower_hive_distance" away from the origin (0,0)
