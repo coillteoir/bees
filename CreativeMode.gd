@@ -7,9 +7,9 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var input_up = Vector3(0, 0, 0)
 
-	if Input.is_action_pressed("rise"):
+	if Input.is_action_just_pressed("rise"):
 		input_up.y = SPEED
-	if Input.is_action_pressed("fall"):
+	if Input.is_action_just_pressed("fall"):
 		input_up.y = SPEED * -1
 
 	var direction = (transform.basis * Vector3(input_dir.x, input_up.y, input_dir.y)).normalized()
