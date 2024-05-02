@@ -17,6 +17,8 @@ var acceleration: Vector3 = Vector3.ZERO
 var speed: float
 var max_speed:float
 
+const POLLEN_COLLECT_TIME = 3
+
 #Arrive vars
 var arriveTarget: Node3D = null
 const ARRIVE_MAX_SPEED = 10
@@ -31,7 +33,7 @@ const WANDER_DIST = 5
 const AXIS = Axis.Horizontal
 const WANDER_FREQ = 0.3
 const WANDER_RADIUS = 10.0
-const WANDER_MAX_SPEED = 1.0
+const WANDER_MAX_SPEED = 2
 
 var theta = 0
 var wanderTarget:Vector3
@@ -156,11 +158,24 @@ func _physics_process(delta):
 	
 	applyForce(delta)
 
-"""
 # Returning to hive after going to flower
 func _on_area_3d_area_entered(area: Area3D):
-	if area == target.find_child("Area3D"):
-		print(self, " ENTERED TARGET")
-		target = get_parent()
-	pass
-"""
+	print(area.name)
+	
+	#If attracted by flower, start heading towards it
+	if area.name == "flowerAttraction" and status == Status.Wandering:  
+		var flower = area.get_parent()
+		setStatusArrive(flower)
+		
+	#If in pollen return to hive
+	if area.name == "flowerPollen":		
+		setStatusArrive(hive) 
+		
+	
+	
+
+
+
+
+
+

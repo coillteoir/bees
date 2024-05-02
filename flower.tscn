@@ -6,30 +6,22 @@ albedo_color = Color(0.537255, 0.00392157, 0.796078, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_ugt4w"]
 material = SubResource("StandardMaterial3D_gsehy")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mbkrf"]
-albedo_color = Color(1, 1, 0, 1)
+[sub_resource type="SphereShape3D" id="SphereShape3D_bc4yb"]
+radius = 3.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_w0qmh"]
-radius = 1.0
+[sub_resource type="SphereShape3D" id="SphereShape3D_i4eov"]
 
 [node name="Flower" type="Node3D"]
 
-[node name="Center" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_ugt4w")
-surface_material_override/0 = SubResource("StandardMaterial3D_mbkrf")
 
-[node name="Petal" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
-mesh = SubResource("SphereMesh_w0qmh")
+[node name="flowerAttraction" type="Area3D" parent="."]
 
-[node name="Petal2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
-mesh = SubResource("SphereMesh_w0qmh")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="flowerAttraction"]
+shape = SubResource("SphereShape3D_bc4yb")
 
-[node name="Petal3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-mesh = SubResource("SphereMesh_w0qmh")
+[node name="flowerPollen" type="Area3D" parent="."]
 
-[node name="Petal4" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
-mesh = SubResource("SphereMesh_w0qmh")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="flowerPollen"]
+shape = SubResource("SphereShape3D_i4eov")
