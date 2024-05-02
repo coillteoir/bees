@@ -1,5 +1,6 @@
 extends Node3D
 
+var pollinated = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -9,17 +10,14 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+	
+func is_pollinated() -> bool:
+	return pollinated
 
+func set_pollinated(state:bool):
+	pollinated = state
 
 func _on_timer_timeout():
-	$flowerAttraction.set_monitoring(true)
-	$flowerAttraction.set_monitorable(true)
+	pollinated = true
 	print("Flower is pollinated")
-
-
-func _on_flower_attraction_area_entered(area):
-	if area.name == "Bee Area":
-		print("Pollen Taken")
-		$flowerAttraction.set_monitorable(false)
-		print($flowerAttraction.monitorable)
-		$flowerAttraction/Timer.start()
+	print(pollinated)

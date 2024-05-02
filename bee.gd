@@ -210,9 +210,14 @@ func _on_bee_area_entered(area: Area3D):
 		setStatusWander()
 	
 	#If attracted by flower, start heading towards it
-	if area.name == "flowerAttraction" and status == Status.Wandering:  
-		var flower = area.get_parent()
-		setStatusArrive(flower)
+	if area.name == "flowerAttraction" and status == Status.Wandering:
+			var flower = area.get_parent()
+			if flower.is_pollinated():
+				flower.set_pollinated(false)
+				print("POLLEN TAKEN")
+				setStatusArrive(flower)
+			else:
+				print("NO POLLEN")
 		
 	#If in pollen return to hive
 	if area.name == "flowerPollen":		
