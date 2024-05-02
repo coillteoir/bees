@@ -3,7 +3,7 @@ extends CharacterBody3D
 var movements: Array[Callable] = []
 
 #Boid properties
-enum Status {Wandering, Arriving}
+enum Status {Wandering, Arriving, Returning}
 var status:Status
 
 const MAX_DIST_FROM_HIVE = 20
@@ -16,7 +16,7 @@ var force: Vector3 = Vector3.ZERO
 var acceleration: Vector3 = Vector3.ZERO
 var speed: float
 var max_speed:float
-var rotation_speed:float = 350
+var max_rotation_speed:float = 350
 
 const POLLEN_COLLECT_TIME = 3
 
@@ -43,7 +43,7 @@ var noise: FastNoiseLite = FastNoiseLite.new()
 
 #Scene nodes 
 var hive:Node3D
-var testTarget:Node3D
+var exitTarget:Node3D
 
 func _arrive() -> Vector3:
 
@@ -96,9 +96,15 @@ func _noiseWander() -> Vector3:
 	var desired = toTarget * max_speed
 	return desired - vel
 
-
 func setStatusArrive(target):
 	status = Status.Arriving
+	movements.clear()
+	movements.append(_arrive)
+	arriveTarget = target
+	max_speed = ARRIVE_MAX_SPEED;
+	
+func setStatusReturning(target):
+	status = Status.Returning
 	movements.clear()
 	movements.append(_arrive)
 	arriveTarget = target
@@ -116,10 +122,10 @@ func setStatusWander():
 		
 func _ready():
 	#Get scene nodes 
-	testTarget = get_tree().current_scene.find_child("testTarget")
 	hive = get_parent()
+	exitTarget = hive.find_child("exitPoint")
 	
-	setStatusWander()
+	setStatusArrive(exitTarget)
 
 func calculate() -> Vector3:
 	var forceAccumulator = Vector3.ZERO
@@ -157,25 +163,35 @@ func applyRotation(delta):
 	
 	# If the velocity is not zero (i.e., the bee is moving)
 	if direction.length() > 0:
+		# Calculate pitch (rotation around the x-axis)
+		var pitch = asin(-direction.y) * 180 / PI
+		
+		# Ensure the pitch angle is within [-90, 90] degrees
+		pitch = clamp(pitch, -90.0, 90.0)
+		
+		# Apply pitch rotation to the bee
+		rotation_degrees.x = pitch
+		
 		# Convert the direction vector to a rotation in radians
-		var target_angle = atan2(direction.x, direction.z) * 180 / PI
-		
-		# Ensure the target angle is within [0, 360] degrees
-		target_angle = fmod(target_angle + 180.0 + 360.0, 360.0)
-		
-		# Calculate the angle difference between current and target angles
-		var current_angle = rotation_degrees.y
-		var angle_diff = (target_angle - current_angle + 180.0)
-		angle_diff = fmod(angle_diff + 180.0, 360.0) - 180.0
-		
-		# Choose the shortest rotation direction
-		if abs(angle_diff) > 180:
-			angle_diff -= 360.0 * sign(angle_diff)
-		
-		# Smoothly rotate the bee towards the target angle
-		rotation_degrees.y += clamp(angle_diff, -rotation_speed * delta, rotation_speed * delta)
+		var target_pitch = atan2(direction.x, direction.z) * 180 / PI
 
-	
+		# Ensure the target angle is within [0, 360] degrees
+		target_pitch = fmod(target_pitch + 180.0 + 360.0, 360.0)
+
+		# Calculate the angle difference between current and target angles
+		var current_pitch = rotation_degrees.y
+		var pitch_diff = (target_pitch - current_pitch + 180.0)
+		pitch_diff = fmod(pitch_diff + 180.0, 360.0) - 180.0
+
+		# Choose the shortest rotation direction
+		if abs(pitch_diff) > 180:
+			pitch_diff -= 360.0 * sign(pitch_diff)
+
+		# Smoothly rotate the bee towards the target angle
+		rotation_degrees.y += clamp(pitch_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
+		
+
+
 func _physics_process(delta):
 	if (status == Status.Wandering):	
 		var distFromHive = hive.global_transform.origin.distance_to(global_transform.origin)
@@ -190,14 +206,23 @@ func _physics_process(delta):
 func _on_area_3d_area_entered(area: Area3D):
 	print(area.name)
 	
+	if area.name == "exitPoint" and status == Status.Arriving:
+		setStatusWander()
+	
 	#If attracted by flower, start heading towards it
 	if area.name == "flowerAttraction" and status == Status.Wandering:  
 		var flower = area.get_parent()
+		area.set_monitoring(false)
+		area.set_monitorable(false)
+		print("STOPPING AREA")
+		print(area.monitorable)
+		print(area.monitoring)
+		area.find_child("Timer").start()
 		setStatusArrive(flower)
 		
 	#If in pollen return to hive
 	if area.name == "flowerPollen":		
-		setStatusArrive(hive) 
+		setStatusReturning(hive) 
 		
 	
 	

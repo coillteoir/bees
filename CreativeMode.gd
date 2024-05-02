@@ -3,7 +3,7 @@ extends CharacterBody3D
 
 const speed:float = 10
 @export var cam_sensitivity:int  = 100
-var relative
+var relative: Vector2 = Vector2.ZERO
 
 func _input(event):
 	if event is InputEventMouseMotion:

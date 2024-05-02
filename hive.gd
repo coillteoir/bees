@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var BEES_MAX = 10
+@export var BEES_MAX = 50
 
 var bee = preload("res://bee.tscn")
 var bees: Array = []
@@ -16,11 +16,10 @@ func _spawn_bee():
 		var bee_n = bee.instantiate()
 
 		add_child(bee_n)
-		bee_n.global_position.z += 2
-		bee_n.velocity.x = randf_range(-10, 10)
-		bee_n.velocity.y = randf_range(-10, 10)
+		bee_n.global_position.x += 2
+		bee_n.global_position.y += 0.5
+		bee_n.global_rotation.y = 90
 		bees.append(bee_n)
-
 
 func _on_timer_timeout():
 	_spawn_bee()
