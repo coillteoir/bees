@@ -202,8 +202,8 @@ func _physics_process(delta):
 	applyForce(delta)
 	applyRotation(delta)
 
-# Returning to hive after going to flower
-func _on_area_3d_area_entered(area: Area3D):
+
+func _on_bee_area_entered(area: Area3D):
 	print(area.name)
 	
 	if area.name == "exitPoint" and status == Status.Arriving:
@@ -212,12 +212,6 @@ func _on_area_3d_area_entered(area: Area3D):
 	#If attracted by flower, start heading towards it
 	if area.name == "flowerAttraction" and status == Status.Wandering:  
 		var flower = area.get_parent()
-		area.set_monitoring(false)
-		area.set_monitorable(false)
-		print("STOPPING AREA")
-		print(area.monitorable)
-		print(area.monitoring)
-		area.find_child("Timer").start()
 		setStatusArrive(flower)
 		
 	#If in pollen return to hive
@@ -226,9 +220,3 @@ func _on_area_3d_area_entered(area: Area3D):
 		
 	
 	
-
-
-
-
-
-
