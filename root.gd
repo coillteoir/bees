@@ -18,6 +18,10 @@ func _init():
 		add_child(new_flower)
 
 
+func _ready():
+	generate_flower_coords(flower_count, flower_min_distance, flower_area, flower_hive_distance)
+
+
 func _process(delta):
 	# Manage creative mode state
 	if Input.is_action_just_pressed("ui_text_clear_carets_and_selection"):
@@ -34,8 +38,12 @@ func _process(delta):
 				find_child("CreativeMode").find_child("Camera3D").current = true
 
 
-func _ready():
-	generate_flower_coords(flower_count, flower_min_distance, flower_area, flower_hive_distance)
+func validate_point(new_point, points):
+	# Check if the new point is at least min_distance away from existing points
+	for existing_point in points:
+		if new_point.distance_to(existing_point) < flower_min_distance:
+			return false
+	return true
 
 
 # Function to generate flowers coordinates
@@ -52,19 +60,9 @@ func generate_flower_coords(
 		)
 
 		# Check if the new point is at least min_distance_origin away from the origin (0, 0)
-		if new_point.length() < flower_hive_distance:
+		if !validate_point(new_point, points) and new_point.length() < flower_hive_distance:
 			continue
 
-		var valid = true
-
-		# Check if the new point is at least min_distance away from existing points
-		for existing_point in points:
-			if new_point.distance_to(existing_point) < flower_min_distance:
-				valid = false
-				break
-
-		# Add the new point if it's valid
-		if valid:
-			flowers[points.size()].global_position.x = new_point.x
-			flowers[points.size()].global_position.z = new_point.y
-			points.append(new_point)
+		flowers[points.size()].global_position.x = new_point.x
+		flowers[points.size()].global_position.z = new_point.y
+		points.append(new_point)
