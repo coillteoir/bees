@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://dxbkia0bkekf6"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_i4eov"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ugt4w"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxbay"]
+transparency = 1
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bc4yb"]
+radius = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mablv"]
+transparency = 1
+albedo_color = Color(1, 0, 1, 0.117647)
+
+[sub_resource type="SphereMesh" id="SphereMesh_t2nje"]
+material = SubResource("StandardMaterial3D_mablv")
+radius = 3.0
+height = 6.0
+
+[node name="Flower" type="Node3D"]
+
+[node name="flowerPollen" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="flowerPollen"]
+shape = SubResource("SphereShape3D_i4eov")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="flowerPollen"]
+mesh = SubResource("SphereMesh_ugt4w")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_rxbay")
+
+[node name="flowerAttraction" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="flowerAttraction"]
+shape = SubResource("SphereShape3D_bc4yb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="flowerAttraction"]
+mesh = SubResource("SphereMesh_t2nje")
+
+[node name="Timer" type="Timer" parent="flowerAttraction"]
+wait_time = 15.0
