@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cw4wwuxjartg5"]
+[gd_scene load_steps=8 format=3 uid="uid://cw4wwuxjartg5"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
 [ext_resource type="PackedScene" uid="uid://7aqhehv0sjx3" path="res://hive.tscn" id="2_croj8"]
 [ext_resource type="Script" path="res://testTarget.gd" id="3_tknvi"]
+[ext_resource type="Script" path="res://CreativeMode.gd" id="4_4x4i3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k6kio"]
 albedo_color = Color(1, 0, 0, 1)
@@ -17,7 +18,7 @@ script = ExtResource("1_bxopo")
 
 [node name="Hive" parent="." instance=ExtResource("2_croj8")]
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="FixedCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 19.573, 0)
 fov = 78.3484
 
@@ -36,3 +37,9 @@ shape = SubResource("SphereShape3D_yocmi")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1829, 5.88544, 0)
+
+[node name="CreativeMode" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.62529, 5.31319)
+script = ExtResource("4_4x4i3")
+
+[node name="Camera3D" type="Camera3D" parent="CreativeMode"]

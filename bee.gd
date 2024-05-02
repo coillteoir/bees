@@ -25,9 +25,8 @@ var arriveTarget: Node3D = null
 const ARRIVE_MAX_SPEED = 10
 const SLOWING_DISTANCE = 30
 
-
 #Noise Wander Vars
-enum Axis { Horizontal, Vertical}
+enum Axis { Horizontal, Vertical }
 
 const WANDER_AMP = 2000
 const WANDER_DIST = 5
@@ -37,9 +36,10 @@ const WANDER_RADIUS = 10.0
 const WANDER_MAX_SPEED = 2
 
 var theta = 0
-var wanderTarget:Vector3
-var world_target:Vector3
-var noise:FastNoiseLite = FastNoiseLite.new()
+var wanderTarget: Vector3
+var world_target: Vector3
+var noise: FastNoiseLite = FastNoiseLite.new()
+
 
 #Scene nodes 
 var hive:Node3D
@@ -53,7 +53,7 @@ func _arrive() -> Vector3:
 
 	if distToTarget < 2:  #if distance is less than 2, stop
 		return Vector3.ZERO
-		
+
 	var rampedSpeed = (distToTarget / SLOWING_DISTANCE) * max_speed #sets speed based on ratio between dist and slowingDistance, scaled to max_speed
 	
 	var limitedSpeed = min(max_speed, rampedSpeed) #Limit speed
@@ -61,40 +61,41 @@ func _arrive() -> Vector3:
 	return desiredVel - vel #returns steering force		
 	
 func _noiseWander() -> Vector3:
-	var n  = noise.get_noise_1d(theta) #get noise value for current theta
-	
-	var angle = deg_to_rad(n * WANDER_AMP) 
-	
+	var n = noise.get_noise_1d(theta)  #get noise value for current theta
+
+	var angle = deg_to_rad(n * WANDER_AMP)
+
 	var delta = get_process_delta_time()
 
 	var rot = global_transform.basis.get_euler()
-	
+
 	rot.x = 0
-	
+
 	#Calculate wander vector
 	if AXIS == Axis.Horizontal:
 		wanderTarget.x = sin(angle)
 		wanderTarget.y = 0
-		wanderTarget.z =  cos(angle)		
+		wanderTarget.z = cos(angle)
 		rot.z = 0
 	else:
 		wanderTarget.x = 0
 		wanderTarget.y = sin(angle)
-		wanderTarget.z = cos(angle)		
-		
-	wanderTarget *= WANDER_RADIUS #scale wander target by radius
+		wanderTarget.z = cos(angle)
+
+	wanderTarget *= WANDER_RADIUS  #scale wander target by radius
 
 	var local_target = wanderTarget + (Vector3.BACK * WANDER_DIST)
-	
+
 	var projected = Basis.from_euler(rot)
-	
-	world_target = global_transform.origin + (projected * local_target)	
+
+	world_target = global_transform.origin + (projected * local_target)
 	theta += WANDER_FREQ * delta * PI * 2.0
-	
+
 	var toTarget = world_target - global_transform.origin
 	toTarget = toTarget.normalized()
 	var desired = toTarget * max_speed
 	return desired - vel
+
 
 func setStatusArrive(target):
 	status = Status.Arriving
