@@ -16,6 +16,7 @@ var force: Vector3 = Vector3.ZERO
 var acceleration: Vector3 = Vector3.ZERO
 var speed: float
 var max_speed:float
+var rotation_speed:float = 350
 
 const POLLEN_COLLECT_TIME = 3
 
@@ -148,6 +149,31 @@ func applyForce(delta):
 
 		set_velocity(vel)
 		move_and_slide()
+		
+func applyRotation(delta):
+	# Calculate the direction vector of movement based on the velocity
+	var direction = vel.normalized()
+	
+	# If the velocity is not zero (i.e., the bee is moving)
+	if direction.length() > 0:
+		# Convert the direction vector to a rotation in radians
+		var target_angle = atan2(direction.x, direction.z) * 180 / PI
+		
+		# Ensure the target angle is within [0, 360] degrees
+		target_angle = fmod(target_angle + 180.0 + 360.0, 360.0)
+		
+		# Calculate the angle difference between current and target angles
+		var current_angle = rotation_degrees.y
+		var angle_diff = (target_angle - current_angle + 180.0)
+		angle_diff = fmod(angle_diff + 180.0, 360.0) - 180.0
+		
+		# Choose the shortest rotation direction
+		if abs(angle_diff) > 180:
+			angle_diff -= 360.0 * sign(angle_diff)
+		
+		# Smoothly rotate the bee towards the target angle
+		rotation_degrees.y += clamp(angle_diff, -rotation_speed * delta, rotation_speed * delta)
+
 	
 func _physics_process(delta):
 	if (status == Status.Wandering):	
@@ -157,6 +183,7 @@ func _physics_process(delta):
 			setStatusArrive(hive)
 	
 	applyForce(delta)
+	applyRotation(delta)
 
 # Returning to hive after going to flower
 func _on_area_3d_area_entered(area: Area3D):
