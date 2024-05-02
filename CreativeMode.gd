@@ -2,7 +2,6 @@ extends CharacterBody3D
 
 const SPEED = 5.0
 
-
 func _physics_process(delta):
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var input_up = Vector3(0, 0, 0)

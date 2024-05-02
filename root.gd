@@ -19,6 +19,7 @@ func _init():
 
 
 func _process(delta):
+	# Manage creative mode state
 	if Input.is_action_just_pressed("ui_text_clear_carets_and_selection"):
 		get_tree().quit()
 	if Input.is_action_just_pressed("ui_accept"):
@@ -26,8 +27,10 @@ func _process(delta):
 		camera_mode = (camera_mode + 1) % 2
 		match camera_mode:
 			0:
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 				find_child("FixedCamera").current = true
 			1:
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 				find_child("CreativeMode").find_child("Camera3D").current = true
 
 
