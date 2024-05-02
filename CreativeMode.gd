@@ -14,7 +14,7 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _physics_process(delta):
 	rotate(Vector3.DOWN, deg_to_rad(relative.x * deg_to_rad(cam_sensitivity) * delta))
 	rotate(transform.basis.x,deg_to_rad(- relative.y * deg_to_rad(cam_sensitivity) * delta))
 	relative = Vector2.ZERO
