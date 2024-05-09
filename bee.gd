@@ -207,6 +207,7 @@ func _on_bee_area_entered(area: Area3D):
 	print(area.name)
 	
 	if area.name == "exitPoint" and status == Status.Arriving:
+		print("EXIT POINT ENTERED")
 		setStatusWander()
 	
 	#If attracted by flower, start heading towards it

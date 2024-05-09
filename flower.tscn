@@ -46,4 +46,5 @@ mesh = SubResource("SphereMesh_t2nje")
 [node name="Timer" type="Timer" parent="flowerAttraction"]
 wait_time = 10.0
 
+[connection signal="area_entered" from="flowerAttraction" to="." method="_on_flower_attraction_area_entered"]
 [connection signal="timeout" from="flowerAttraction/Timer" to="." method="_on_timer_timeout"]
