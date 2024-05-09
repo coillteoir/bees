@@ -1,10 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://sxtw8fme7g63"]
+[gd_scene load_steps=2 format=3 uid="uid://sxtw8fme7g63"]
 
 [ext_resource type="PackedScene" uid="uid://c3sccy6x0ht5j" path="res://examples_dd3d/DebugDrawDemoScene.tscn" id="2"]
-[ext_resource type="Script" path="res://examples_dd3d/DebugDrawDemoSceneCS.cs" id="2_ipqea"]
 
 [node name="DebugDrawDemoSceneCS" instance=ExtResource("2")]
-script = ExtResource("2_ipqea")
+script = null
 
 [node name="Settings" parent="." index="21"]
 switch_to_scene = "res://examples_dd3d/DebugDrawDemoScene.tscn"

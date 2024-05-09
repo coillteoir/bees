@@ -66,7 +66,7 @@ func _physics_process(delta):
 func _arrive() -> Vector3:
 	#get vector to target
 	var toTarget = arriveTarget.global_transform.origin - global_transform.origin
-
+	
 	#get distance to target
 	var distToTarget = toTarget.length()
 
@@ -110,7 +110,8 @@ func _noiseWander() -> Vector3:
 		wanderTarget.y = sin(angle)
 		wanderTarget.z = cos(angle)
 
-	wanderTarget *= WANDER_RADIUS  #scale wander target by radius
+	#scale wander target by radius
+	wanderTarget *= WANDER_RADIUS
 
 	var local_target = wanderTarget + (Vector3.BACK * WANDER_DIST)
 
@@ -130,7 +131,7 @@ func setStatusArrive(target):
 	movements.clear()
 	movements.append(_arrive)
 	arriveTarget = target
-	max_speed = ARRIVE_MAX_SPEED
+	max_speed = ARRIVE_MAX_SPEED;
 
 
 func setStatusReturning(target):
@@ -138,7 +139,7 @@ func setStatusReturning(target):
 	movements.clear()
 	movements.append(_arrive)
 	arriveTarget = target
-	max_speed = ARRIVE_MAX_SPEED
+	max_speed = ARRIVE_MAX_SPEED;
 
 
 func setStatusWander():
