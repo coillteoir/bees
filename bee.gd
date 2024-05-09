@@ -4,7 +4,7 @@ var movements: Array[Callable] = []
 
 #Boid properties
 enum Status {Wandering, Arriving, Returning}
-var status:Status
+var status: Status
 
 const MAX_DIST_FROM_HIVE = 20
 
@@ -15,8 +15,8 @@ var vel: Vector3 = Vector3.ZERO
 var force: Vector3 = Vector3.ZERO
 var acceleration: Vector3 = Vector3.ZERO
 var speed: float
-var max_speed:float
-var max_rotation_speed:float = 350
+var max_speed: float
+var max_rotation_speed: float = 350
 
 const POLLEN_COLLECT_TIME = 3
 
@@ -42,26 +42,56 @@ var noise: FastNoiseLite = FastNoiseLite.new()
 
 
 #Scene nodes 
-var hive:Node3D
-var exitTarget:Node3D
+var hive: Node3D
+var exitTarget: Node3D
+
+
+func _ready():
+	#Get scene nodes 
+	hive = get_parent()
+	exitTarget = hive.find_child("exitPoint")
+	
+	setStatusArrive(exitTarget)
+
+
+func _physics_process(delta):
+	if (status == Status.Wandering):	
+		var distFromHive = hive.global_transform.origin.distance_to(global_transform.origin)
+				
+		if (distFromHive > MAX_DIST_FROM_HIVE):
+			setStatusArrive(hive)
+	
+	applyForce(delta)
+	applyRotation(delta)
+
 
 func _arrive() -> Vector3:
-
 	#get vector to target
 	var toTarget = arriveTarget.global_transform.origin - global_transform.origin
-	var distToTarget = toTarget.length()  #get distance to target
+	
+	#get distance to target
+	var distToTarget = toTarget.length()
 
-	if distToTarget < 2:  #if distance is less than 2, stop
+	#if distance is less than 2, stop
+	if distToTarget < 2:
 		return Vector3.ZERO
 
-	var rampedSpeed = (distToTarget / SLOWING_DISTANCE) * max_speed #sets speed based on ratio between dist and slowingDistance, scaled to max_speed
-	
-	var limitedSpeed = min(max_speed, rampedSpeed) #Limit speed
-	var desiredVel = (toTarget * limitedSpeed) / distToTarget #desired velcity vector to get to target
-	return desiredVel - vel #returns steering force		
-	
+	#sets speed based on ratio between dist and slowingDistance, scaled to max_speed
+	var rampedSpeed = (distToTarget / SLOWING_DISTANCE) * max_speed
+
+	#Limit speed
+	var limitedSpeed = min(max_speed, rampedSpeed)
+
+	#desired velcity vector to get to target
+	var desiredVel = (toTarget * limitedSpeed) / distToTarget
+
+	#returns steering force
+	return desiredVel - vel
+
+
 func _noiseWander() -> Vector3:
-	var n = noise.get_noise_1d(theta)  #get noise value for current theta
+	#get noise value for current theta
+	var n = noise.get_noise_1d(theta)
 
 	var angle = deg_to_rad(n * WANDER_AMP)
 
@@ -82,7 +112,8 @@ func _noiseWander() -> Vector3:
 		wanderTarget.y = sin(angle)
 		wanderTarget.z = cos(angle)
 
-	wanderTarget *= WANDER_RADIUS  #scale wander target by radius
+	#scale wander target by radius
+	wanderTarget *= WANDER_RADIUS
 
 	var local_target = wanderTarget + (Vector3.BACK * WANDER_DIST)
 
@@ -96,20 +127,23 @@ func _noiseWander() -> Vector3:
 	var desired = toTarget * max_speed
 	return desired - vel
 
+
 func setStatusArrive(target):
 	status = Status.Arriving
 	movements.clear()
 	movements.append(_arrive)
 	arriveTarget = target
 	max_speed = ARRIVE_MAX_SPEED;
-	
+
+
 func setStatusReturning(target):
 	status = Status.Returning
 	movements.clear()
 	movements.append(_arrive)
 	arriveTarget = target
 	max_speed = ARRIVE_MAX_SPEED;
-	
+
+
 func setStatusWander():
 	status = Status.Wandering
 	
@@ -119,13 +153,7 @@ func setStatusWander():
 	movements.clear()
 	movements.append(_noiseWander)
 	max_speed = WANDER_MAX_SPEED
-		
-func _ready():
-	#Get scene nodes 
-	hive = get_parent()
-	exitTarget = hive.find_child("exitPoint")
-	
-	setStatusArrive(exitTarget)
+
 
 func calculate() -> Vector3:
 	var forceAccumulator = Vector3.ZERO
@@ -138,6 +166,7 @@ func calculate() -> Vector3:
 		forceAccumulator = force.limit_length(MAX_FORCE)
 
 	return forceAccumulator
+
 
 func applyForce(delta):
 	var newForce = calculate()
@@ -156,7 +185,8 @@ func applyForce(delta):
 
 		set_velocity(vel)
 		move_and_slide()
-		
+
+
 func applyRotation(delta):
 	# Calculate the direction vector of movement based on the velocity
 	var direction = vel.normalized()
@@ -189,25 +219,12 @@ func applyRotation(delta):
 
 		# Smoothly rotate the bee towards the target angle
 		rotation_degrees.y += clamp(pitch_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
-		
-
-
-func _physics_process(delta):
-	if (status == Status.Wandering):	
-		var distFromHive = hive.global_transform.origin.distance_to(global_transform.origin)
-				
-		if (distFromHive > MAX_DIST_FROM_HIVE):
-			setStatusArrive(hive)
-	
-	applyForce(delta)
-	applyRotation(delta)
 
 
 func _on_bee_area_entered(area: Area3D):
 	print(area.name)
 	
 	if area.name == "exitPoint" and status == Status.Arriving:
-		print("EXIT POINT ENTERED")
 		setStatusWander()
 	
 	#If attracted by flower, start heading towards it
@@ -217,12 +234,9 @@ func _on_bee_area_entered(area: Area3D):
 				flower.set_pollinated(false)
 				print("POLLEN TAKEN")
 				setStatusArrive(flower)
-			else:
+			else:	
 				print("NO POLLEN")
 		
 	#If in pollen return to hive
-	if area.name == "flowerPollen":		
+	if area.name == "flowerPollen":
 		setStatusReturning(hive) 
-		
-	
-	
