@@ -18,10 +18,6 @@ func _process(_delta):
 	pass
 
 
-func _on_timer_timeout():
-	_spawn_bee()
-
-
 func _spawn_bee():
 	print(bees.size())
 	if bees.size() == BEES_MAX:

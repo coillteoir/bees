@@ -62,29 +62,6 @@ func _physics_process(delta):
 	applyForce(delta)
 	applyRotation(delta)
 
-#Scene nodes 
-var hive: Node3D
-var exitTarget: Node3D
-
-
-func _ready():
-	#Get scene nodes 
-	hive = get_parent()
-	exitTarget = hive.find_child("exitPoint")
-	
-	setStatusArrive(exitTarget)
-
-
-func _physics_process(delta):
-	if (status == Status.Wandering):	
-		var distFromHive = hive.global_transform.origin.distance_to(global_transform.origin)
-				
-		if (distFromHive > MAX_DIST_FROM_HIVE):
-			setStatusArrive(hive)
-	
-	applyForce(delta)
-	applyRotation(delta)
-
 
 func _arrive() -> Vector3:
 	#get vector to target
