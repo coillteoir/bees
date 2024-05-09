@@ -3,7 +3,7 @@ extends CharacterBody3D
 var movements: Array[Callable] = []
 
 #Boid properties
-enum Status {Wandering, Arriving, Returning}
+enum Status { Wandering, Arriving, Returning }
 var status: Status
 
 const MAX_DIST_FROM_HIVE = 20
@@ -40,6 +40,27 @@ var wanderTarget: Vector3
 var world_target: Vector3
 var noise: FastNoiseLite = FastNoiseLite.new()
 
+#Scene nodes
+var hive: Node3D
+var exitTarget: Node3D
+
+
+func _ready():
+	#Get scene nodes
+	hive = get_parent()
+	exitTarget = hive.find_child("exitPoint")
+
+	setStatusArrive(exitTarget)
+
+
+func _physics_process(delta):
+	if status == Status.Wandering:
+		var distFromHive = hive.global_transform.origin.distance_to(global_transform.origin)
+		if distFromHive > MAX_DIST_FROM_HIVE:
+			setStatusArrive(hive)
+
+	applyForce(delta)
+	applyRotation(delta)
 
 #Scene nodes 
 var hive: Node3D
@@ -146,10 +167,10 @@ func setStatusReturning(target):
 
 func setStatusWander():
 	status = Status.Wandering
-	
+
 	var rng = RandomNumberGenerator.new()
 	theta = rng.randf_range(0, 10.0)
-	
+
 	movements.clear()
 	movements.append(_noiseWander)
 	max_speed = WANDER_MAX_SPEED
@@ -180,63 +201,66 @@ func applyForce(delta):
 
 	speed = vel.length()
 
-	if speed > 0:
-		vel = vel.limit_length(max_speed)
-
-		set_velocity(vel)
-		move_and_slide()
+	if speed == 0:
+		return
+	vel = vel.limit_length(max_speed)
+	set_velocity(vel)
+	move_and_slide()
 
 
 func applyRotation(delta):
 	# Calculate the direction vector of movement based on the velocity
 	var direction = vel.normalized()
-	
+
 	# If the velocity is not zero (i.e., the bee is moving)
-	if direction.length() > 0:
-		# Calculate pitch (rotation around the x-axis)
-		var pitch = asin(-direction.y) * 180 / PI
-		
-		# Ensure the pitch angle is within [-90, 90] degrees
-		pitch = clamp(pitch, -90.0, 90.0)
-		
-		# Apply pitch rotation to the bee
-		rotation_degrees.x = pitch
-		
-		# Convert the direction vector to a rotation in radians
-		var target_pitch = atan2(direction.x, direction.z) * 180 / PI
+	if direction.length() == 0:
+		return
+	# Calculate pitch (rotation around the x-axis)
+	var pitch = asin(-direction.y) * 180 / PI
 
-		# Ensure the target angle is within [0, 360] degrees
-		target_pitch = fmod(target_pitch + 180.0 + 360.0, 360.0)
+	# Ensure the pitch angle is within [-90, 90] degrees
+	pitch = clamp(pitch, -90.0, 90.0)
 
-		# Calculate the angle difference between current and target angles
-		var current_pitch = rotation_degrees.y
-		var pitch_diff = (target_pitch - current_pitch + 180.0)
-		pitch_diff = fmod(pitch_diff + 180.0, 360.0) - 180.0
+	# Apply pitch rotation to the bee
+	rotation_degrees.x = pitch
 
-		# Choose the shortest rotation direction
-		if abs(pitch_diff) > 180:
-			pitch_diff -= 360.0 * sign(pitch_diff)
+	# Convert the direction vector to a rotation in radians
+	var target_yaw = atan2(direction.x, direction.z) * 180 / PI
+
+	# Ensure the target angle is within [0, 360] degrees
+	target_yaw = fmod(target_yaw + 180.0 + 360.0, 360.0)
+
+	# Calculate the angle difference between current and target angles
+	var current_yaw = rotation_degrees.y
+	var yaw_diff = target_yaw - current_yaw + 180.0
+	yaw_diff = fmod(yaw_diff + 180.0, 360.0) - 180.0
+
+	# Choose the shortest rotation direction
+	if abs(yaw_diff) > 180:
+		yaw_diff -= 360.0 * sign(yaw_diff)
 
 		# Smoothly rotate the bee towards the target angle
-		rotation_degrees.y += clamp(pitch_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
+		rotation_degrees.y += clamp(
+			yaw_diff, -max_rotation_speed * delta, max_rotation_speed * delta
+		)
 
 
 func _on_bee_area_entered(area: Area3D):
 	print(area.name)
-	
+
 	if area.name == "exitPoint" and status == Status.Arriving:
 		setStatusWander()
-	
+
 	#If attracted by flower, start heading towards it
 	if area.name == "flowerAttraction" and status == Status.Wandering:
-			var flower = area.get_parent()
-			if flower.is_pollinated():
-				flower.set_pollinated(false)
-				print("POLLEN TAKEN")
-				setStatusArrive(flower)
-			else:	
-				print("NO POLLEN")
-		
+		var flower = area.get_parent()
+		if !flower.is_pollinated():
+			print("NO POLLEN")
+
+		flower.set_pollinated(false)
+		print("POLLEN TAKEN")
+		setStatusArrive(flower)
+
 	#If in pollen return to hive
 	if area.name == "flowerPollen":
-		setStatusReturning(hive) 
+		setStatusReturning(hive)
