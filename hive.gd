@@ -35,6 +35,8 @@ func _on_timer_timeout():
 
 
 func _on_area_3d_area_entered(area: Area3D):
-	var bee = area.get_parent()
-	bees.erase(bee)
-	remove_child(bee)
+	var bee_instance = area.get_parent()
+	bees.erase(bee_instance)
+	# NOTE FOR FUTURE: When bee is freed, particles that were already spawned dissapear,
+	# particles.detach() before the bee is freed will allow them to continue to spawn.
+	bee_instance.queue_free()
