@@ -1,6 +1,6 @@
 extends Node3D
 
-var pollinated = true
+var pollination = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -8,16 +8,26 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 	
 func is_pollinated() -> bool:
-	return pollinated
+	return pollination
 
-func set_pollinated(state:bool):
-	pollinated = state
+func set_pollination(state:bool):
+	pollination = state
+	update_particles()
+	if !state:
+		get_node("Timer").start()
+
+
+func update_particles():
+	var pollen_particles = get_node("GPUParticles3D")
+	
+	# Emit pollen particles if flower is pollinated
+	pollen_particles.emitting = pollination
+
 
 func _on_timer_timeout():
-	pollinated = true
+	set_pollination(true)
 	print("Flower is pollinated")
-	print(pollinated)

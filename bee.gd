@@ -233,12 +233,13 @@ func _on_bee_area_entered(area: Area3D):
 			var flowerTarget = flower.get_node("Pollen")
 			
 			if flower.is_pollinated():
-				flower.set_pollinated(false)
+				flower.set_pollination(false)
 				print("POLLEN TAKEN")
 				setStatusArrive(flowerTarget)
-			else:	
+			else:
 				print("NO POLLEN")
 		
 	#If in pollen return to hive
 	if area.name == "flowerPollen":
+		get_node("GPUParticles3D").emitting = true
 		setStatusReturning(hive) 

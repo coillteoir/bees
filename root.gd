@@ -19,10 +19,10 @@ func _init():
 
 
 func _ready():
-	generate_flower_coords(flower_count, flower_min_distance, flower_area, flower_hive_distance)
+	generate_flower_coords()
 
 
-func _process(delta):
+func _process(_delta):
 	# Manage creative mode state
 	if Input.is_action_just_pressed("ui_text_clear_carets_and_selection"):
 		get_tree().quit()
@@ -50,9 +50,7 @@ func validate_point(new_point, points):
 # Flower coordinates are generated with at least "flower_min_distance" away from eachother
 # Flower coordinates are generated within a bounding area "flower_area"
 # Flower coordinates are generated with at least "flower_hive_distance" away from the origin (0,0)
-func generate_flower_coords(
-	flower_count: int, flower_min_distance: float, flower_area: int, flower_hive_distance: float
-):
+func generate_flower_coords():
 	var points = []
 	while points.size() < flower_count:
 		var new_point = Vector2(

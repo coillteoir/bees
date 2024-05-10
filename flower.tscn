@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dxbkia0bkekf6"]
+[gd_scene load_steps=28 format=3 uid="uid://dxbkia0bkekf6"]
 
 [ext_resource type="Script" path="res://flower.gd" id="1_tg66h"]
 
@@ -217,6 +217,37 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_c7p38")
 
+[sub_resource type="Curve" id="Curve_56g3c"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.637097, 1), 0.0, 0.0, 0, 0, Vector2(0.758065, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_i5jp3"]
+curve = SubResource("Curve_56g3c")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_t3oof"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, -1, 0)
+alpha_curve = SubResource("CurveTexture_i5jp3")
+turbulence_noise_strength = 0.1
+turbulence_noise_scale = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cai6f"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.8, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_do6a6"]
+material = SubResource("StandardMaterial3D_cai6f")
+radius = 0.02
+height = 0.04
+
 [node name="Flower" type="Node3D"]
 script = ExtResource("1_tg66h")
 
@@ -229,17 +260,17 @@ shape = SubResource("SphereShape3D_bc4yb")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="flowerAttraction"]
 mesh = SubResource("SphereMesh_t2nje")
 
-[node name="Timer" type="Timer" parent="flowerAttraction"]
-wait_time = 10.0
-
 [node name="flowerPollen" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.1, -0.025)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="flowerPollen"]
 shape = SubResource("SphereShape3D_6meye")
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+
 [node name="Pollen" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.399447, -0.011123, -0.00314663, 0.0256601, 0.173703, 0.0343278, 0.000943005, -0.0150403, 0.398784, 0.00352656, 5.22619, 0.000857792)
+transform = Transform3D(0.399447, -0.011123, -0.00314662, 0.0256601, 0.173703, 0.0343277, 0.000943005, -0.0150403, 0.398784, 0.00352656, 5.22619, 0.000857792)
 mesh = SubResource("ArrayMesh_5udqn")
 skeleton = NodePath("")
 
@@ -265,5 +296,12 @@ transform = Transform3D(0.349538, 0, 0, 0, 0.349538, 0, 0, 0, 0.349538, 2.61571e
 mesh = SubResource("ArrayMesh_ibetk")
 skeleton = NodePath("")
 
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+amount = 100
+lifetime = 5.0
+process_material = SubResource("ParticleProcessMaterial_t3oof")
+draw_pass_1 = SubResource("SphereMesh_do6a6")
+
 [connection signal="area_entered" from="flowerAttraction" to="." method="_on_flower_attraction_area_entered"]
-[connection signal="timeout" from="flowerAttraction/Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
