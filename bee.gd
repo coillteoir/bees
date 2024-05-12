@@ -40,16 +40,30 @@ var wanderTarget: Vector3
 var world_target: Vector3
 var noise: FastNoiseLite = FastNoiseLite.new()
 
-
 #Scene nodes 
 var hive: Node3D
 var exitTarget: Node3D
+var wingLeft: MeshInstance3D
+var wingRight: MeshInstance3D
 
+#Animation
+const WING_HIGH = -25
+const WING_LOW = 25
 
 func _ready():
 	#Get scene nodes 
 	hive = get_parent()
 	exitTarget = hive.find_child("exitPoint")
+	
+	#Setup wings
+	wingLeft = get_node("Bee Model/wingLeft")
+	wingRight = get_node("Bee Model/wingRight")
+	
+	wingLeft.rotate_z(5)
+	wingLeft.global_position.y -= tan(5) * 0.1
+	
+	#wingLeft.transform.basis = Basis(wingLeft.transform.basis.x, wingLeft.transform.basis.y, WING_LOW)
+	#wingRight.transform.basis = Basis(wingLeft.transform.basis.x, wingLeft.transform.basis.y, WING_LOW)
 	
 	setStatusArrive(exitTarget)
 
@@ -61,6 +75,7 @@ func _physics_process(delta):
 		if (distFromHive > MAX_DIST_FROM_HIVE):
 			setStatusArrive(hive)
 	
+	#animate(delta)
 	applyForce(delta)
 	applyRotation(delta)
 
@@ -243,3 +258,17 @@ func _on_bee_area_entered(area: Area3D):
 	if area.name == "flowerPollen":
 		get_node("GPUParticles3D").emitting = true
 		setStatusReturning(hive) 
+
+func animate():
+	pass
+	#wingLeft.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

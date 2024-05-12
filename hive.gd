@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var BEES_MAX = 50
+@export var BEES_MAX = 1
 
 var bee = preload("res://bee.tscn")
 var bees: Array = []
