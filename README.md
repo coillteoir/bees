@@ -9,6 +9,7 @@ To explore the garden yourself, press enter. This will change to a first person 
 |Button|Movement|
 |------|--------|
 |ALT|Change Camera Mode|
+|M|Toggle Music|
 
 ## "Creative Mode" Camera
 |Button|Movement|

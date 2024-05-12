@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://cw4wwuxjartg5"]
+[gd_scene load_steps=12 format=3 uid="uid://cw4wwuxjartg5"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
 [ext_resource type="PackedScene" uid="uid://7aqhehv0sjx3" path="res://hive.tscn" id="2_croj8"]
 [ext_resource type="Script" path="res://CreativeMode.gd" id="4_4x4i3"]
 [ext_resource type="Texture2D" uid="uid://demi4pcswp7n5" path="res://resources/sky1.png" id="4_fc3y0"]
+[ext_resource type="AudioStream" uid="uid://d207ajtons0ts" path="res://resources/HoneyhiveMusic.mp3" id="5_6g1yg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_666qa"]
 albedo_color = Color(0.4, 0.682353, 0.235294, 1)
@@ -56,3 +57,10 @@ shape = SubResource("BoxShape3D_0kxow")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f05mk")
+
+[node name="BGM" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_6g1yg")
+attenuation_model = 3
+volume_db = -35.0
+max_db = 0.0
+autoplay = true
