@@ -5,6 +5,12 @@
 Once you enter the simulation, there is a fixed camera above the scene.
 To explore the garden yourself, press enter. This will change to a first person camera.
 
+## General
+|Button|Movement|
+|------|--------|
+|ALT|Change Camera Mode|
+
+## "Creative Mode" Camera
 |Button|Movement|
 |----|----|
 |A|Left|
