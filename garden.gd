@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var flower_area: int = 15
+@export var flower_area: int = 2
 @export var flower_min_distance: int = 5
 @export var flower_hive_distance: int = 10
 
@@ -43,12 +43,14 @@ func validate_point(point: Vector2) -> bool:
 func generate_flower():
 	var new_flower = flower_template.instantiate()
 	var new_point = Vector2(
-		randf_range(-flower_area, flower_area), randf_range(-flower_area, flower_area)
+		randf_range(-flower_area * flower_count, flower_area * flower_count),
+		randf_range(-flower_area * flower_count, flower_area * flower_count)
 	)
 	var retries = 0
-	while !validate_point(new_point):
+	while !validate_point(new_point) && retries < 5:
 		new_point = Vector2(
-			randf_range(-flower_area, flower_area), randf_range(-flower_area, flower_area)
+			randf_range(-flower_area * flower_count, flower_area * flower_count),
+			randf_range(-flower_area * flower_count, flower_area * flower_count)
 		)
 
 	add_child(new_flower)
