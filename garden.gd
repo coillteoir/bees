@@ -14,7 +14,7 @@ var flower_area: float = sqrt(max_flowers_per_patch * flower_min_distance) * 3
 var hive_buffer: int = 40
 
 # Defines the area that patches are enclosed in
-var patch_area: int = sqrt(flower_area * patch_count)
+var patch_area: int = (flower_area * 2 ) * patch_count
 
 var patch_flowers: Array = []
 var patch_points: Array = []
@@ -27,6 +27,10 @@ func _init():
 
 
 func _ready():
+	print("FLOWER AREA")
+	print(flower_area)
+	print("PATCH AREA")
+	print(patch_area)
 	generate_flower_patches()
 
 
@@ -68,7 +72,7 @@ func generate_flower_patches():
 		)
 
 		# Check if the new point is at least min_distance_origin away from the origin (0, 0)
-		if !validate_patch_point(patch_point) and patch_point.length() < flower_area:
+		if !validate_patch_point(patch_point) and patch_point.length() < patch_area and patch_point.length() > flower_area:
 			continue
 
 		patch_points.append(patch_point)
