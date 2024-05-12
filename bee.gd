@@ -66,6 +66,10 @@ func _physics_process(delta):
 
 func _arrive() -> Vector3:
 	#get vector to target
+	if !is_instance_valid(arriveTarget):
+		arriveTarget = null
+		setStatusWander()
+		return Vector3(0,0,0)
 	var toTarget = arriveTarget.global_transform.origin - global_transform.origin
 
 	#get distance to target
