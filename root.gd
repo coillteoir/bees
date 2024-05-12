@@ -28,6 +28,7 @@ func _init():
 
 func _ready():
 	generate_flower_patches()
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
 func _process(_delta):
@@ -44,6 +45,12 @@ func _process(_delta):
 			1:
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 				find_child("CreativeMode").find_child("Camera3D").current = true
+	if $HUD/VBoxContainer/bee_count.value != $Hive.BEES_MAX:
+		print("RECONCILING bees:", $HUD/VBoxContainer/bee_count.value)
+		$Hive.BEES_MAX = $HUD/VBoxContainer/bee_count.value
+	if $HUD/VBoxContainer/flower_count.value != $Garden.flower_count:
+		print("RECONCILING flowers:", $HUD/VBoxContainer/flower_count.value)
+		$Garden.flower_count = $HUD/VBoxContainer/flower_count.value
 	if Input.is_action_just_pressed("music_enable"):
 		$BGM.stream_paused = !$BGM.stream_paused
 		

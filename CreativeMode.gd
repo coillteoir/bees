@@ -4,9 +4,11 @@ const speed: float = 10
 @export var cam_sensitivity: int = 100
 var relative: Vector2 = Vector2.ZERO
 
+
 func _input(event):
 	if event is InputEventMouseMotion:
 		relative = event.relative
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
