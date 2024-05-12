@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cw4wwuxjartg5"]
+[gd_scene load_steps=5 format=3 uid="uid://cw4wwuxjartg5"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
 [ext_resource type="PackedScene" uid="uid://7aqhehv0sjx3" path="res://hive.tscn" id="2_croj8"]
+[ext_resource type="PackedScene" uid="uid://bjonjgs57cskl" path="res://hud.tscn" id="4_2ieva"]
 [ext_resource type="Script" path="res://CreativeMode.gd" id="4_4x4i3"]
 
 [node name="root" type="Node3D"]
@@ -22,3 +23,5 @@ transform = Transform3D(-4.37114e-08, -0.5, 0.866025, 0, 0.866025, 0.5, -1, 2.18
 script = ExtResource("4_4x4i3")
 
 [node name="Camera3D" type="Camera3D" parent="CreativeMode"]
+
+[node name="HUD" parent="." instance=ExtResource("4_2ieva")]
