@@ -10,6 +10,7 @@ var flowers: Array = []
 var camera_mode = 0
 var flower_count = 10
 
+
 func _init():
 	for i in range(flower_count):
 		var new_flower = flower_template.instantiate()
