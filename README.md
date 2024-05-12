@@ -20,6 +20,11 @@ To explore the garden yourself, press enter. This will change to a first person 
 |SPACE|Up|
 |SHIFT|Down|
 
+# References
+|Resource|Source|
+|--|--|
+|Skybox|https://github.com/rpgwhitelock/AllSkyFree_Godot|
+
 Subversions denote milestones in the project, each of these must meet a level of acceptance criteria.
 
 ## V0.1

@@ -1,8 +1,30 @@
-[gd_scene load_steps=4 format=3 uid="uid://cw4wwuxjartg5"]
+[gd_scene load_steps=11 format=3 uid="uid://cw4wwuxjartg5"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
 [ext_resource type="PackedScene" uid="uid://7aqhehv0sjx3" path="res://hive.tscn" id="2_croj8"]
 [ext_resource type="Script" path="res://CreativeMode.gd" id="4_4x4i3"]
+[ext_resource type="Texture2D" uid="uid://demi4pcswp7n5" path="res://resources/sky1.png" id="4_fc3y0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_666qa"]
+albedo_color = Color(0.4, 0.682353, 0.235294, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ipfe2"]
+material = SubResource("StandardMaterial3D_666qa")
+size = Vector3(75, 1, 75)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0kxow"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_yme0r"]
+panorama = ExtResource("4_fc3y0")
+
+[sub_resource type="Sky" id="Sky_drv3s"]
+sky_material = SubResource("PanoramaSkyMaterial_yme0r")
+
+[sub_resource type="Environment" id="Environment_f05mk"]
+background_mode = 2
+background_color = Color(0.513726, 0.705882, 0.972549, 1)
+sky = SubResource("Sky_drv3s")
+reflected_light_source = 1
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_bxopo")
@@ -22,3 +44,15 @@ transform = Transform3D(-4.37114e-08, -0.5, 0.866025, 0, 0.866025, 0.5, -1, 2.18
 script = ExtResource("4_4x4i3")
 
 [node name="Camera3D" type="Camera3D" parent="CreativeMode"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_ipfe2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_0kxow")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_f05mk")
