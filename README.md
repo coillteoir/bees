@@ -9,6 +9,7 @@ To explore the garden yourself, press enter. This will change to a first person 
 |Button|Movement|
 |------|--------|
 |ALT|Change Camera Mode|
+|M|Toggle Music|
 
 ## "Creative Mode" Camera
 |Button|Movement|
@@ -19,6 +20,12 @@ To explore the garden yourself, press enter. This will change to a first person 
 |S|Back|
 |SPACE|Up|
 |SHIFT|Down|
+
+# References
+|Resource|Source|
+|--|--|
+|Skybox|https://github.com/rpgwhitelock/AllSkyFree_Godot|
+|BGM|https://youtu.be/_KwOh88Z-VI?si=dWQHKlkrpT146FG7|
 
 Subversions denote milestones in the project, each of these must meet a level of acceptance criteria.
 

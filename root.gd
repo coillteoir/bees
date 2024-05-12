@@ -36,7 +36,10 @@ func _process(_delta):
 			1:
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 				find_child("CreativeMode").find_child("Camera3D").current = true
-
+	if Input.is_action_just_pressed("music_enable"):
+		$BGM.stream_paused = !$BGM.stream_paused
+		
+		
 
 func validate_point(new_point, points):
 	# Check if the new point is at least min_distance away from existing points
