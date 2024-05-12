@@ -17,8 +17,8 @@ To explore the garden yourself, press enter. This will change to a first person 
 |D|Right|
 |W|Forward|
 |S|Back|
-|Q|Up|
-|E|Down|
+|SPACE|Up|
+|SHIFT|Down|
 
 Subversions denote milestones in the project, each of these must meet a level of acceptance criteria.
 
