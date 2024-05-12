@@ -26,9 +26,13 @@ func _process(_delta):
 		var toDelete = flowers.pick_random()
 		flowers.erase(toDelete)
 		toDelete.queue_free()
-		
 
-func validate_flower(new_flower) -> bool:
+
+func validate_point(point: Vector2) -> bool:
+	for flower in flowers:
+		var current_point = Vector2(flower.global_position.x, flower.global_position.z)
+		if current_point.distance_to(point) < flower_min_distance:
+			return false
 	return true
 
 
@@ -38,8 +42,16 @@ func validate_flower(new_flower) -> bool:
 # Flower coordinates are generated with at least "flower_hive_distance" away from the origin (0,0)
 func generate_flower():
 	var new_flower = flower_template.instantiate()
+	var new_point = Vector2(
+		randf_range(-flower_area, flower_area), randf_range(-flower_area, flower_area)
+	)
+	var retries = 0
+	while !validate_point(new_point):
+		new_point = Vector2(
+			randf_range(-flower_area, flower_area), randf_range(-flower_area, flower_area)
+		)
+
 	add_child(new_flower)
-	new_flower.global_position.x = randf_range(-flower_area, flower_area)
-	new_flower.global_position.z = randf_range(-flower_area, flower_area)
+	new_flower.global_position.x = new_point.x
+	new_flower.global_position.z = new_point.y
 	flowers.append(new_flower)
-	
