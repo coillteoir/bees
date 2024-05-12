@@ -35,3 +35,5 @@ func _process(_delta):
 	if $HUD/VBoxContainer/flower_count.value != $Garden.flower_count:
 		print("RECONCILING flowers:", $HUD/VBoxContainer/flower_count.value)
 		$Garden.flower_count = $HUD/VBoxContainer/flower_count.value
+	if Input.is_action_just_pressed("music_enable"):
+		$BGM.stream_paused = !$BGM.stream_paused
