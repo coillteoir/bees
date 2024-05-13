@@ -3,7 +3,7 @@ extends CharacterBody3D
 var movements: Array[Callable] = []
 
 #Boid properties
-enum Status {Wandering, Arriving, Returning}
+enum Status { Wandering, Arriving, Returning }
 var status: Status
 
 const MAX_DIST_FROM_HIVE = 20
@@ -52,7 +52,7 @@ var flappingUp = true
 var wingRotation = 0  #counter of how much wing's been rotated
 
 func _ready():
-	#Get scene nodes 
+	#Get scene nodes
 	hive = get_parent()
 	exitTarget = hive.find_child("exitPoint")
 	
@@ -71,10 +71,10 @@ func setupWings():
 	wingRight.global_position.y -= tan(0.75) * 0.1	
 
 func _physics_process(delta):
-	if (status == Status.Wandering):	
+	if status == Status.Wandering:
 		var distFromHive = hive.global_transform.origin.distance_to(global_transform.origin)
-				
-		if (distFromHive > MAX_DIST_FROM_HIVE):
+
+		if distFromHive > MAX_DIST_FROM_HIVE:
 			setStatusArrive(hive)
 	
 	animateWings()
@@ -109,9 +109,15 @@ func animateWings():
 
 
 func _arrive() -> Vector3:
+	# ensure target exists before continuing
+	if !is_instance_valid(arriveTarget):
+		arriveTarget = null
+		setStatusWander()
+		return Vector3(0, 0, 0)
+
 	#get vector to target
 	var toTarget = arriveTarget.global_transform.origin - global_transform.origin
-	
+
 	#get distance to target
 	var distToTarget = toTarget.length()
 
@@ -176,7 +182,7 @@ func setStatusArrive(target):
 	movements.clear()
 	movements.append(_arrive)
 	arriveTarget = target
-	max_speed = ARRIVE_MAX_SPEED;
+	max_speed = ARRIVE_MAX_SPEED
 
 
 func setStatusReturning(target):
@@ -184,15 +190,15 @@ func setStatusReturning(target):
 	movements.clear()
 	movements.append(_arrive)
 	arriveTarget = target
-	max_speed = ARRIVE_MAX_SPEED;
+	max_speed = ARRIVE_MAX_SPEED
 
 
 func setStatusWander():
 	status = Status.Wandering
-	
+
 	var rng = RandomNumberGenerator.new()
 	theta = rng.randf_range(0, 10.0)
-	
+
 	movements.clear()
 	movements.append(_noiseWander)
 	max_speed = WANDER_MAX_SPEED
@@ -233,18 +239,18 @@ func applyForce(delta):
 func applyRotation(delta):
 	# Calculate the direction vector of movement based on the velocity
 	var direction = vel.normalized()
-	
+
 	# If the velocity is not zero (i.e., the bee is moving)
 	if direction.length() > 0:
 		# Calculate pitch (rotation around the x-axis)
 		var pitch = asin(-direction.y) * 180 / PI
-		
+
 		# Ensure the pitch angle is within [-90, 90] degrees
 		pitch = clamp(pitch, -90.0, 90.0)
-		
+
 		# Apply pitch rotation to the bee
 		rotation_degrees.x = pitch
-		
+
 		# Convert the direction vector to a rotation in radians
 		var target_pitch = atan2(direction.x, direction.z) * 180 / PI
 
@@ -253,7 +259,7 @@ func applyRotation(delta):
 
 		# Calculate the angle difference between current and target angles
 		var current_pitch = rotation_degrees.y
-		var pitch_diff = (target_pitch - current_pitch + 180.0)
+		var pitch_diff = target_pitch - current_pitch + 180.0
 		pitch_diff = fmod(pitch_diff + 180.0, 360.0) - 180.0
 
 		# Choose the shortest rotation direction
@@ -261,39 +267,29 @@ func applyRotation(delta):
 			pitch_diff -= 360.0 * sign(pitch_diff)
 
 		# Smoothly rotate the bee towards the target angle
-		rotation_degrees.y += clamp(pitch_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
+		rotation_degrees.y += clamp(
+			pitch_diff, -max_rotation_speed * delta, max_rotation_speed * delta
+		)
 
 
 func _on_bee_area_entered(area: Area3D):
-	
 	if area.name == "exitPoint" and status == Status.Arriving:
 		setStatusWander()
-	
+
 	#If attracted by flower, start heading towards it
 	if area.name == "flowerAttraction" and status == Status.Wandering:
-			var flower = area.get_parent()
-			var flowerTarget = flower.get_node("Pollen")
-			
-			if flower.is_pollinated():
-				flower.set_pollination(false)
-				print("POLLEN TAKEN")
-				setStatusArrive(flowerTarget)
-			else:
-				print("NO POLLEN")
-		
+		var flower = area.get_parent()
+		var flowerTarget = flower.get_node("Pollen")
+
+		if flower.is_pollinated():
+			flower.set_pollination(false)
+			print("POLLEN TAKEN")
+			setStatusArrive(flowerTarget)
+		else:
+			print("NO POLLEN")
+
 	#If in pollen return to hive
 	if area.name == "flowerPollen":
 		get_node("GPUParticles3D").emitting = true
 		setStatusReturning(hive) 
 
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
