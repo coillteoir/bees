@@ -47,7 +47,6 @@ var wingLeft: MeshInstance3D
 var wingRight: MeshInstance3D
 
 #Wings
-const WING_SPEED = 0.15
 var flappingUp = true
 var wingRotation = 0  #counter of how much wing's been rotated
 
@@ -82,26 +81,28 @@ func _physics_process(delta):
 	applyRotation(delta)
 
 func animateWings():
+	var wingSpeed = acceleration.length()/5
+	
 	if(flappingUp): 		
-		wingRotation += WING_SPEED 
+		wingRotation += wingSpeed 
 		
-		wingLeft.rotate_z(WING_SPEED)
-		wingLeft.global_position.y += tan(WING_SPEED) * 0.15
+		wingLeft.rotate_z(wingSpeed)
+		wingLeft.global_position.y += tan(wingSpeed) * 0.15
 		
-		wingRight.rotate_z(-WING_SPEED)
-		wingRight.global_position.y -= tan(-WING_SPEED) * 0.15
+		wingRight.rotate_z(-wingSpeed)
+		wingRight.global_position.y -= tan(-wingSpeed) * 0.15
 
 		if (wingRotation >= 1.5):
 			wingRotation = 0
 			flappingUp = false
 	else: #Flapping down
-		wingRotation += WING_SPEED
+		wingRotation += wingSpeed
 		
-		wingLeft.rotate_z(-WING_SPEED)
-		wingLeft.global_position.y += tan(-WING_SPEED) * 0.15
+		wingLeft.rotate_z(-wingSpeed)
+		wingLeft.global_position.y += tan(-wingSpeed) * 0.15
 		
-		wingRight.rotate_z(WING_SPEED)
-		wingRight.global_position.y -= tan(WING_SPEED) * 0.15
+		wingRight.rotate_z(wingSpeed)
+		wingRight.global_position.y -= tan(wingSpeed) * 0.15
 		
 		if (wingRotation >= 1.5):
 			wingRotation = 0
