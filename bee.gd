@@ -46,27 +46,29 @@ var exitTarget: Node3D
 var wingLeft: MeshInstance3D
 var wingRight: MeshInstance3D
 
-#Animation
-const WING_HIGH = -25
-const WING_LOW = 25
+#Wings
+const WING_SPEED = 0.15
+var flappingUp = true
+var wingRotation = 0  #counter of how much wing's been rotated
 
 func _ready():
 	#Get scene nodes 
 	hive = get_parent()
 	exitTarget = hive.find_child("exitPoint")
 	
-	#Setup wings
-	wingLeft = get_node("Bee Model/wingLeft")
-	wingRight = get_node("Bee Model/wingRight")
-	
-	wingLeft.rotate_z(5)
-	wingLeft.global_position.y -= tan(5) * 0.1
-	
-	#wingLeft.transform.basis = Basis(wingLeft.transform.basis.x, wingLeft.transform.basis.y, WING_LOW)
-	#wingRight.transform.basis = Basis(wingLeft.transform.basis.x, wingLeft.transform.basis.y, WING_LOW)
+	setupWings()
 	
 	setStatusArrive(exitTarget)
 
+func setupWings():
+	wingLeft = get_node("Bee Model/wingLeft")
+	wingRight = get_node("Bee Model/wingRight")
+	
+	wingLeft.rotate_z(-0.75)	
+	wingLeft.global_position.y += tan(-0.75) * 0.1
+	
+	wingRight.rotate_z(0.75)	
+	wingRight.global_position.y -= tan(0.75) * 0.1	
 
 func _physics_process(delta):
 	if (status == Status.Wandering):	
@@ -75,9 +77,35 @@ func _physics_process(delta):
 		if (distFromHive > MAX_DIST_FROM_HIVE):
 			setStatusArrive(hive)
 	
-	#animate(delta)
+	animateWings()
 	applyForce(delta)
 	applyRotation(delta)
+
+func animateWings():
+	if(flappingUp): 		
+		wingRotation += WING_SPEED 
+		
+		wingLeft.rotate_z(WING_SPEED)
+		wingLeft.global_position.y += tan(WING_SPEED) * 0.15
+		
+		wingRight.rotate_z(-WING_SPEED)
+		wingRight.global_position.y -= tan(-WING_SPEED) * 0.15
+
+		if (wingRotation >= 1.5):
+			wingRotation = 0
+			flappingUp = false
+	else: #Flapping down
+		wingRotation += WING_SPEED
+		
+		wingLeft.rotate_z(-WING_SPEED)
+		wingLeft.global_position.y += tan(-WING_SPEED) * 0.15
+		
+		wingRight.rotate_z(WING_SPEED)
+		wingRight.global_position.y -= tan(WING_SPEED) * 0.15
+		
+		if (wingRotation >= 1.5):
+			wingRotation = 0
+			flappingUp = true
 
 
 func _arrive() -> Vector3:
@@ -237,7 +265,6 @@ func applyRotation(delta):
 
 
 func _on_bee_area_entered(area: Area3D):
-	print(area.name)
 	
 	if area.name == "exitPoint" and status == Status.Arriving:
 		setStatusWander()
@@ -259,9 +286,7 @@ func _on_bee_area_entered(area: Area3D):
 		get_node("GPUParticles3D").emitting = true
 		setStatusReturning(hive) 
 
-func animate():
-	pass
-	#wingLeft.
+
 	
 	
 	

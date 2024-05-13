@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var BEES_MAX = 1
+@export var BEES_MAX = 50
 
 var bee = preload("res://bee.tscn")
 var bees: Array = []
@@ -19,7 +19,6 @@ func _process(_delta):
 
 
 func _spawn_bee():
-	print(bees.size())
 	if bees.size() == BEES_MAX:
 		return
 	var bee_n = bee.instantiate()
