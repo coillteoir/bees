@@ -1,6 +1,6 @@
 extends Node3D
 
-var BEES_MAX = 50
+const BEES_MAX = 50
 var bee = preload("res://bee.tscn")
 var bees: Array = []
 

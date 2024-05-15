@@ -2,7 +2,7 @@ extends Node3D
 
 @export var patch_count: int = 1
 
-#Defines the maximum amount of 
+#Defines the maximum amount of
 var max_flowers_per_patch: int = 7
 
 # Defines the minimum distance between flowers
@@ -45,16 +45,16 @@ func _process(_delta):
 			1:
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 				find_child("CreativeMode").find_child("Camera3D").current = true
+	if Input.is_action_just_pressed("music_enable"):
+		$BGM.stream_paused = !$BGM.stream_paused
+
 	if $HUD/VBoxContainer/bee_count.value != $Hive.BEES_MAX:
 		print("RECONCILING bees:", $HUD/VBoxContainer/bee_count.value)
 		$Hive.BEES_MAX = $HUD/VBoxContainer/bee_count.value
 	if $HUD/VBoxContainer/flower_count.value != $Garden.flower_count:
 		print("RECONCILING flowers:", $HUD/VBoxContainer/flower_count.value)
 		$Garden.flower_count = $HUD/VBoxContainer/flower_count.value
-	if Input.is_action_just_pressed("music_enable"):
-		$BGM.stream_paused = !$BGM.stream_paused
-		
-		
+
 
 func validate_patch_point(new_point):
 	# Check if the new point is at least min_distance away from existing points
@@ -67,7 +67,10 @@ func validate_patch_point(new_point):
 func validate_flower_point(new_point):
 	# Check if the new point is at least min_distance away from existing points
 	for flower in patch_flowers[-1]:
-		if new_point.distance_to(Vector2(flower.global_position.x, flower.global_position.z)) < flower_min_distance:
+		if (
+			new_point.distance_to(Vector2(flower.global_position.x, flower.global_position.z))
+			< flower_min_distance
+		):
 			return false
 	return true
 
@@ -89,17 +92,21 @@ func generate_flower_patches():
 		patch_points.append(patch_point)
 		print("PATCH POINT")
 		print(patch_point)
-		
-		var num_flowers = randi_range(max_flowers_per_patch/2, max_flowers_per_patch)
+
+		var num_flowers = randi_range(max_flowers_per_patch / 2, max_flowers_per_patch)
 		print("NUM FLOWERS")
 		print(num_flowers)
-		
+
 		patch_flowers.append([])
-		
+
 		while patch_flowers[-1].size() < num_flowers:
 			var flower_point = Vector2(
-				randf_range(patch_points[-1].x - (flower_area/2), patch_points[-1].y + (flower_area/2)),
-				randf_range(patch_points[-1].x - (flower_area/2), patch_points[-1].y + (flower_area/2))
+				randf_range(
+					patch_points[-1].x - (flower_area / 2), patch_points[-1].y + (flower_area / 2)
+				),
+				randf_range(
+					patch_points[-1].x - (flower_area / 2), patch_points[-1].y + (flower_area / 2)
+				)
 			)
 			print("FLOWER POINT")
 			print(flower_point)
@@ -109,10 +116,10 @@ func generate_flower_patches():
 				print("INVALID")
 				continue
 			print("VALID")
-		
+
 			var new_flower = flower_template.instantiate()
 			add_child(new_flower)
 			patch_flowers[-1].append(new_flower)
-			
+
 			patch_flowers[-1][-1].global_position.x = flower_point.x
 			patch_flowers[-1][-1].global_position.z = flower_point.y
