@@ -234,10 +234,11 @@ func applyForce(delta):
 
 	speed = vel.length()
 
-	if speed > 0:
-		vel = vel.limit_length(max_speed)
-		set_velocity(vel)
-		move_and_slide()
+	if speed == 0:
+		return
+	vel = vel.limit_length(max_speed)
+	set_velocity(vel)
+	move_and_slide()
 
 
 func applyRotation(delta):
