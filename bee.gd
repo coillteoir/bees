@@ -55,9 +55,7 @@ func _ready():
 	#Get scene nodes
 	hive = get_parent()
 	exitTarget = hive.find_child("exitPoint")
-
 	setupWings()
-
 	setStatusArrive(exitTarget)
 
 
@@ -78,7 +76,6 @@ func _physics_process(delta):
 
 		if distFromHive > MAX_DIST_FROM_HIVE:
 			setStatusArrive(hive)
-
 	animateWings()
 	applyForce(delta)
 	applyRotation(delta)

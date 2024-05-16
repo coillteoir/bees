@@ -9,8 +9,6 @@ class Patch:
 	var flowers: Array
 
 
-const flower_template: PackedScene = preload("res://flower.tscn")
-
 # Defines the minimum distance between flowers.
 const flower_min_distance: int = 7
 # Defines the maximum amount of flowers per patch.
@@ -26,6 +24,22 @@ var patches: Array = []
 
 # Defines the max distance from the hive that a patch can be.
 var patch_area: float = hive_buffer + flower_area
+
+const flower_template: PackedScene = preload("res://flower.tscn")
+
+const colors: Array = [
+	# Blue
+	Color(0.125, 0.698, 0.666),
+	# Yellow
+	Color(1, 1, 0),
+	# Pink
+	Color(1, 0.713, 0.756),
+	# Red
+	Color(1, 0.27, 0),
+]
+
+var patch_flowers: Array = []
+var patch_points: Array = []
 
 
 func _init():
@@ -74,7 +88,6 @@ func generate_flower_patches():
 	var fail_count = 0
 	while patches.size() < patch_count:
 		var patch = Patch.new()
-
 		if fail_count == 20:
 			patch_area += 5
 			fail_count = 0
@@ -106,6 +119,13 @@ func generate_flower_patches():
 			new_flower.global_position.x = flower_point.x
 			new_flower.global_position.z = flower_point.y
 			new_flower.global_position.y = randi_range(-5, 5)
+
+			var material = new_flower.get_node("Petals").get_active_material(0).duplicate()
+			var color = colors[randi_range(0, colors.size() - 1)]
+			print(color)
+			material.albedo_color = color
+			print(material.albedo_color)
+			new_flower.get_node("Petals").set_surface_override_material(0, material)
 			patch.flowers.append(new_flower)
 		patches.append(patch)
 		fail_count = 0
