@@ -1,7 +1,7 @@
 extends Node3D
 
-
 var camera_mode = 0
+
 
 func _init():
 	pass

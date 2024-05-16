@@ -55,10 +55,19 @@ func _ready():
 	#Get scene nodes
 	hive = get_parent()
 	exitTarget = hive.find_child("exitPoint")
-
 	setupWings()
-
 	setStatusArrive(exitTarget)
+
+
+func setupWings():
+	wingLeft = get_node("Bee Model/wingLeft")
+	wingRight = get_node("Bee Model/wingRight")
+
+	wingLeft.rotate_z(-0.75)
+	wingLeft.global_position.y += tan(-0.75) * 0.1
+
+	wingRight.rotate_z(0.75)
+	wingRight.global_position.y -= tan(0.75) * 0.1
 
 
 func setupWings():
@@ -78,10 +87,38 @@ func _physics_process(delta):
 
 		if distFromHive > MAX_DIST_FROM_HIVE:
 			setStatusArrive(hive)
-
 	animateWings()
 	applyForce(delta)
 	applyRotation(delta)
+
+
+func animateWings():
+	var wingSpeed = acceleration.length() / 5
+
+	if flappingUp:
+		wingRotation += wingSpeed
+
+		wingLeft.rotate_z(wingSpeed)
+		wingLeft.global_position.y += tan(wingSpeed) * 0.15
+
+		wingRight.rotate_z(-wingSpeed)
+		wingRight.global_position.y -= tan(-wingSpeed) * 0.15
+
+		if wingRotation >= 1.5:
+			wingRotation = 0
+			flappingUp = false
+	else:  #Flapping down
+		wingRotation += wingSpeed
+
+		wingLeft.rotate_z(-wingSpeed)
+		wingLeft.global_position.y += tan(-wingSpeed) * 0.15
+
+		wingRight.rotate_z(wingSpeed)
+		wingRight.global_position.y -= tan(wingSpeed) * 0.15
+
+		if wingRotation >= 1.5:
+			wingRotation = 0
+			flappingUp = true
 
 
 func animateWings():
@@ -275,7 +312,7 @@ func applyRotation(delta):
 	rotation_degrees.y += clamp(yaw_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
 
 	# Banking B)
-	rotation_degrees.z = -1 * clamp(yaw_diff*45, -45, 45)
+	rotation_degrees.z = -1 * clamp(yaw_diff * 45, -45, 45)
 
 
 func _on_bee_area_entered(area: Area3D):
