@@ -18,7 +18,7 @@ func _process(_delta):
 
 
 func _spawn_bee():
-	if bees.size() == BEES_MAX:
+	if bees.size() >= BEES_MAX:
 		return
 	var bee_n = bee.instantiate()
 	add_child(bee_n)
