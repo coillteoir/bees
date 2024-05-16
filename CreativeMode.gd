@@ -25,12 +25,12 @@ func _physics_process(delta):
 	if Input.is_key_pressed(KEY_SHIFT):
 		mult = 3
 
-	var strafe = Input.get_axis("ui_left", "ui_right")
+	var strafe = Input.get_axis("move_left", "move_right")
 	if abs(strafe) > 0:
 		position = position + global_transform.basis.x * speed * strafe * mult * delta
 		# global_translate(global_transform.basis.x * speed * turn * mult * delta)
 
-	var move = Input.get_axis("ui_up", "ui_down")
+	var move = Input.get_axis("move_up", "move_down")
 	if abs(move) > 0:
 		global_translate(global_transform.basis.z * speed * move * mult * delta)
 
