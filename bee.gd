@@ -64,10 +64,10 @@ func setupWings():
 	wingRight = get_node("Bee Model/wingRight")
 
 	wingLeft.rotate_z(-0.75)
-	wingLeft.global_position.y += tan(-0.75) * 0.1
+	wingLeft.position.y += tan(-0.75) * 0.125
 
 	wingRight.rotate_z(0.75)
-	wingRight.global_position.y -= tan(0.75) * 0.1
+	wingRight.position.y -= tan(0.75) * 0.125
 
 
 func _physics_process(delta):
@@ -82,30 +82,32 @@ func _physics_process(delta):
 
 
 func animateWings():
-	var wingSpeed = acceleration.length() / 5
+	const wingPosMultiplier = 0.15
+	const maxRotation = 1.5
+	var wingSpeed = acceleration.length() / 10
 
 	if flappingUp:
 		wingRotation += wingSpeed
 
 		wingLeft.rotate_z(wingSpeed)
-		wingLeft.global_position.y += tan(wingSpeed) * 0.15
+		wingLeft.position.y += tan(wingSpeed) * wingPosMultiplier
 
 		wingRight.rotate_z(-wingSpeed)
-		wingRight.global_position.y -= tan(-wingSpeed) * 0.15
+		wingRight.position.y -= tan(-wingSpeed) * wingPosMultiplier
 
-		if wingRotation >= 1.5:
+		if wingRotation >= maxRotation:
 			wingRotation = 0
 			flappingUp = false
 	else:  #Flapping down
 		wingRotation += wingSpeed
 
 		wingLeft.rotate_z(-wingSpeed)
-		wingLeft.global_position.y += tan(-wingSpeed) * 0.15
+		wingLeft.position.y += tan(-wingSpeed) * wingPosMultiplier
 
 		wingRight.rotate_z(wingSpeed)
-		wingRight.global_position.y -= tan(wingSpeed) * 0.15
+		wingRight.position.y -= tan(wingSpeed) * wingPosMultiplier
 
-		if wingRotation >= 1.5:
+		if wingRotation >= maxRotation:
 			wingRotation = 0
 			flappingUp = true
 
