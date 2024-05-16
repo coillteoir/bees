@@ -19,6 +19,7 @@ albedo_color = Color(1, 0, 0.0166664, 0.117647)
 script = ExtResource("1_aph8k")
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 2.5
 autostart = true
 
 [node name="Area3D" type="Area3D" parent="."]

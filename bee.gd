@@ -6,9 +6,9 @@ var movements: Array[Callable] = []
 enum Status { Wandering, Arriving, Returning }
 var status: Status
 
-const MAX_DIST_FROM_HIVE = 20
+const MAX_DIST_FROM_HIVE = 400
 
-const MAX_FORCE: float = 10.0
+const MAX_FORCE: float = 20.0
 
 const mass = 1
 var vel: Vector3 = Vector3.ZERO
@@ -33,7 +33,7 @@ const WANDER_DIST = 5
 const AXIS = Axis.Horizontal
 const WANDER_FREQ = 0.3
 const WANDER_RADIUS = 10.0
-const WANDER_MAX_SPEED = 2
+const WANDER_MAX_SPEED = 10
 
 var theta = 0
 var wanderTarget: Vector3
