@@ -115,7 +115,7 @@ func generate_flower_patches():
 			add_child(new_flower)
 			new_flower.global_position.x = flower_point.x
 			new_flower.global_position.z = flower_point.y
-			new_flower.global_position.y = randi_range(0, 5)
+			new_flower.global_position.y = randf_range(-2, 0)
 
 			var material = new_flower.get_node("Petals").get_active_material(0).duplicate()
 			var color = colors[randi_range(0, colors.size() - 1)]
