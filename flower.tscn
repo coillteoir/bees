@@ -242,7 +242,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.1, -0.025)
 shape = SubResource("SphereShape3D_6meye")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 10.0
+wait_time = 30.0
 
 [node name="Pollen" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.399447, -0.011123, -0.00314662, 0.0256601, 0.173703, 0.0343277, 0.000943005, -0.0150403, 0.398784, 0.00352656, 5.22619, 0.000857792)
