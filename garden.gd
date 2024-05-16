@@ -1,6 +1,14 @@
 extends Node3D
 
-const patch_marker: PackedScene = preload("res://patch_marker.tscn")
+# Defines the number of patches to spawn.
+@export var patch_count: int = 15
+
+
+class Patch:
+	var point: Vector2
+	var flowers: Array
+
+
 const flower_template: PackedScene = preload("res://flower.tscn")
 
 # Defines the minimum distance between flowers.
@@ -14,53 +22,43 @@ const patch_min_distance: int = 35
 # Defines the radius around the buffer where no patches will spawn.
 const hive_buffer: int = 20
 
-var patch_flowers: Array = []
-var patch_points: Array = []
-
-# Defines the number of patches to spawn.
-@export var patch_count: int = 15
+var patches: Array = []
 
 # Defines the max distance from the hive that a patch can be.
 var patch_area: float = hive_buffer + flower_area
 
 
 func _init():
-	#for i in range(15):
-	#var patch_mesh = patch_marker.instantiate()
-	#add_child(patch_mesh)
-	#patch_mesh.global_position.x = i
 	pass
 
 
 func _ready():
-	print("FLOWER AREA")
-	print(flower_area)
-	print("PATCH AREA")
-	print(patch_area)
 	generate_flower_patches()
 
 
 func _process(_delta):
-	#if flower_count > flowers.size():
-	#generate_flower()
-	#if flower_count < flowers.size():
-	#var toDelete = flowers.pick_random()
-	#flowers.erase(toDelete)
-	#toDelete.queue_free()
-	pass
+	if patch_count > patches.size():
+		generate_flower_patches()
+	if patch_count < patches.size():
+		var delete_index = randi_range(0, patches.size() - 1)
+
+		for item in patches[delete_index].flowers:
+			item.queue_free()
+
+		patches.erase(patches[delete_index])
 
 
 func validate_patch_point(new_point):
 	# Check if the new point is at least min_distance away from existing points
-	for existing_point in patch_points:
-		if new_point.distance_to(existing_point) < patch_min_distance:
+	for patch in patches:
+		if new_point.distance_to(patch.point) < patch_min_distance:
 			return false
 	return true
 
 
-func validate_flower_point(new_point):
+func validate_flower_point(new_point, new_flowers):
 	# Check if the new point is at least min_distance away from existing points
-	for flower in patch_flowers[-1]:
+	for flower in new_flowers:
 		if (
 			new_point.distance_to(Vector2(flower.global_position.x, flower.global_position.z))
 			< flower_min_distance
@@ -75,53 +73,39 @@ func validate_flower_point(new_point):
 # Flower coordinates are generated with at least "flower_hive_distance" away from the origin (0,0)
 func generate_flower_patches():
 	var fail_count = 0
-	while patch_points.size() < patch_count:
+	while patches.size() < patch_count:
+		var patch = Patch.new()
+
 		if fail_count == 20:
 			patch_area += 5
 			fail_count = 0
 			print("INCREASING PATCH AREA")
 
-		var patch_point = Vector2(
+		patch.point = Vector2(
 			randf_range(-patch_area, patch_area), randf_range(-patch_area, patch_area)
 		)
 
 		# Check if the new point is at least min_distance_origin away from the origin (0, 0)
-		if !validate_patch_point(patch_point) or patch_point.length() < hive_buffer:
+		if !validate_patch_point(patch.point) or patch.point.length() < hive_buffer:
 			fail_count += 1
 			continue
 
-		patch_points.append(patch_point)
-		print("PATCH POINT")
-		print(patch_point)
-
-		##Testing patch spawns
-		#var patch_mesh = patch_marker.instantiate()
-		#add_child(patch_mesh)
-		#patch_mesh.global_position.x = patch_point.x
-		#patch_mesh.global_position.z = patch_point.y
-
-		var num_flowers = randi_range(max_flowers_per_patch / 2, max_flowers_per_patch)
-		#print("NUM FLOWERS")
-		#print(num_flowers)
-
-		patch_flowers.append([])
-
-		while patch_flowers[-1].size() < num_flowers:
-			var flower_point = Vector2(
-				randf_range(patch_points[-1].x - (flower_area), patch_points[-1].x + (flower_area)),
-				randf_range(patch_points[-1].y - (flower_area), patch_points[-1].y + (flower_area))
+		var num_flowers: int = randi_range(max_flowers_per_patch / 2, max_flowers_per_patch)
+		patch.flowers = []
+		while patch.flowers.size() < num_flowers:
+			var flower_point: Vector2 = Vector2(
+				randf_range(patch.point.x - (flower_area), patch.point.x + (flower_area)),
+				randf_range(patch.point.y - (flower_area), patch.point.y + (flower_area))
 			)
-			#print("FLOWER POINT")
-			#print(flower_point)
 
 			# Check if the new point is at least min_distance_origin away from the origin (0, 0)
-			if !validate_flower_point(flower_point):
-				print("FLOWER INVALID")
+			if !validate_flower_point(flower_point, patch.flowers):
 				continue
 
 			var new_flower = flower_template.instantiate()
 			add_child(new_flower)
-			patch_flowers[-1].append(new_flower)
-
-			patch_flowers[-1][-1].global_position.x = flower_point.x
-			patch_flowers[-1][-1].global_position.z = flower_point.y
+			new_flower.global_position.x = flower_point.x
+			new_flower.global_position.z = flower_point.y
+			patch.flowers.append(new_flower)
+		patches.append(patch)
+		fail_count = 0

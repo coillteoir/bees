@@ -33,7 +33,6 @@ reflected_light_source = 1
 
 [node name="root" type="Node3D"]
 script = ExtResource("1_bxopo")
-patch_count = null
 
 [node name="Hive" parent="." instance=ExtResource("2_croj8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
