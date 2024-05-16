@@ -38,9 +38,6 @@ const colors: Array = [
 	Color(1, 0.27, 0),
 ]
 
-var patch_flowers: Array = []
-var patch_points: Array = []
-
 
 func _init():
 	pass
