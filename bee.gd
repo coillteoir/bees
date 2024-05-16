@@ -257,23 +257,25 @@ func applyRotation(delta):
 	rotation_degrees.x = pitch
 
 	# Convert the direction vector to a rotation in radians
-	var target_pitch = atan2(direction.x, direction.z) * 180 / PI
+	var target_yaw = atan2(direction.x, direction.z) * 180 / PI
 
 	# Ensure the target angle is within [0, 360] degrees
-	target_pitch = fmod(target_pitch + 180.0 + 360.0, 360.0)
+	target_yaw = fmod(target_yaw + 180.0 + 360.0, 360.0)
 
 	# Calculate the angle difference between current and target angles
-	var current_pitch = rotation_degrees.y
-	var pitch_diff = target_pitch - current_pitch + 180.0
-	pitch_diff = fmod(pitch_diff + 180.0, 360.0) - 180.0
+	var current_yaw = rotation_degrees.y
+	var yaw_diff = target_yaw - current_yaw + 180.0
+	yaw_diff = fmod(yaw_diff + 180.0, 360.0) - 180.0
 
 	# Choose the shortest rotation direction
-	if abs(pitch_diff) > 180:
-		pitch_diff -= 360.0 * sign(pitch_diff)
+	if abs(yaw_diff) > 180:
+		yaw_diff -= 360.0 * sign(yaw_diff)
 
 	# Smoothly rotate the bee towards the target angle
-	rotation_degrees.y += clamp(pitch_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
-	rotation_degrees.z += clamp(pitch_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
+	rotation_degrees.y += clamp(yaw_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
+
+	# Banking B)
+	rotation_degrees.z = -1 * clamp(yaw_diff*45, -45, 45)
 
 
 func _on_bee_area_entered(area: Area3D):
