@@ -3,6 +3,16 @@ extends Node3D
 const patch_marker: PackedScene = preload("res://patch_marker.tscn")
 const flower_template: PackedScene = preload("res://flower.tscn")
 
+const colors: Array = [
+					# Blue
+					Color(0.125, 0.698, 0.666),
+					# Yellow
+					Color(1, 1, 0),
+					# Pink
+					Color(1, 0.713, 0.756),
+					# Red
+					Color(1, 0.27, 0),]
+
 # Defines the minimum distance between flowers.
 const flower_min_distance: int = 7
 # Defines the maximum amount of flowers per patch.
@@ -24,11 +34,9 @@ var patch_points: Array = []
 var patch_area: float = hive_buffer + flower_area
 
 
+
+
 func _init():
-	#for i in range(15):
-	#var patch_mesh = patch_marker.instantiate()
-	#add_child(patch_mesh)
-	#patch_mesh.global_position.x = i
 	pass
 
 
@@ -41,12 +49,6 @@ func _ready():
 
 
 func _process(_delta):
-	#if flower_count > flowers.size():
-	#generate_flower()
-	#if flower_count < flowers.size():
-	#var toDelete = flowers.pick_random()
-	#flowers.erase(toDelete)
-	#toDelete.queue_free()
 	pass
 
 
@@ -125,3 +127,10 @@ func generate_flower_patches():
 
 			patch_flowers[-1][-1].global_position.x = flower_point.x
 			patch_flowers[-1][-1].global_position.z = flower_point.y
+			
+			var material = patch_flowers[-1][-1].get_node("Petals").get_active_material(0).duplicate()
+			var color = colors[randi_range(0,colors.size()-1)]
+			print(color)
+			material.albedo_color = color
+			print(material.albedo_color)
+			patch_flowers[-1][-1].get_node("Petals").set_surface_override_material(0, material)

@@ -11,7 +11,7 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_rqiea"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_n8i65"]
-size = Vector3(75, 1, 75)
+size = Vector3(500, 1, 500)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hs3b8"]
 albedo_color = Color(0.4, 0.682353, 0.235294, 1)
