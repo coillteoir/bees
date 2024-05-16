@@ -35,7 +35,7 @@ func _process(_delta):
 	# Manage creative mode state
 	if Input.is_action_just_pressed("ui_text_clear_carets_and_selection"):
 		get_tree().quit()
-	if Input.is_action_just_pressed("change_cam"):
+i	if Input.is_action_just_pressed("change_cam"):
 		print("camera change")
 		camera_mode = (camera_mode + 1) % 2
 		match camera_mode:
