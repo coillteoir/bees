@@ -40,7 +40,7 @@ var wanderTarget: Vector3
 var world_target: Vector3
 var noise: FastNoiseLite = FastNoiseLite.new()
 
-#Scene nodes 
+#Scene nodes
 var hive: Node3D
 var exitTarget: Node3D
 var wingLeft: MeshInstance3D
@@ -50,24 +50,27 @@ var wingRight: MeshInstance3D
 var flappingUp = true
 var wingRotation = 0  #counter of how much wing's been rotated
 
+
 func _ready():
 	#Get scene nodes
 	hive = get_parent()
 	exitTarget = hive.find_child("exitPoint")
-	
+
 	setupWings()
-	
+
 	setStatusArrive(exitTarget)
+
 
 func setupWings():
 	wingLeft = get_node("Bee Model/wingLeft")
 	wingRight = get_node("Bee Model/wingRight")
-	
-	wingLeft.rotate_z(-0.75)	
+
+	wingLeft.rotate_z(-0.75)
 	wingLeft.global_position.y += tan(-0.75) * 0.1
-	
-	wingRight.rotate_z(0.75)	
-	wingRight.global_position.y -= tan(0.75) * 0.1	
+
+	wingRight.rotate_z(0.75)
+	wingRight.global_position.y -= tan(0.75) * 0.1
+
 
 func _physics_process(delta):
 	if status == Status.Wandering:
@@ -75,36 +78,37 @@ func _physics_process(delta):
 
 		if distFromHive > MAX_DIST_FROM_HIVE:
 			setStatusArrive(hive)
-	
+
 	animateWings()
 	applyForce(delta)
 	applyRotation(delta)
 
+
 func animateWings():
-	var wingSpeed = acceleration.length()/5
-	
-	if(flappingUp): 		
-		wingRotation += wingSpeed 
-		
+	var wingSpeed = acceleration.length() / 5
+
+	if flappingUp:
+		wingRotation += wingSpeed
+
 		wingLeft.rotate_z(wingSpeed)
 		wingLeft.global_position.y += tan(wingSpeed) * 0.15
-		
+
 		wingRight.rotate_z(-wingSpeed)
 		wingRight.global_position.y -= tan(-wingSpeed) * 0.15
 
-		if (wingRotation >= 1.5):
+		if wingRotation >= 1.5:
 			wingRotation = 0
 			flappingUp = false
-	else: #Flapping down
+	else:  #Flapping down
 		wingRotation += wingSpeed
-		
+
 		wingLeft.rotate_z(-wingSpeed)
 		wingLeft.global_position.y += tan(-wingSpeed) * 0.15
-		
+
 		wingRight.rotate_z(wingSpeed)
 		wingRight.global_position.y -= tan(wingSpeed) * 0.15
-		
-		if (wingRotation >= 1.5):
+
+		if wingRotation >= 1.5:
 			wingRotation = 0
 			flappingUp = true
 
@@ -230,11 +234,11 @@ func applyForce(delta):
 
 	speed = vel.length()
 
-	if speed > 0:
-		vel = vel.limit_length(max_speed)
-
-		set_velocity(vel)
-		move_and_slide()
+	if speed == 0:
+		return
+	vel = vel.limit_length(max_speed)
+	set_velocity(vel)
+	move_and_slide()
 
 
 func applyRotation(delta):
@@ -242,35 +246,36 @@ func applyRotation(delta):
 	var direction = vel.normalized()
 
 	# If the velocity is not zero (i.e., the bee is moving)
-	if direction.length() > 0:
-		# Calculate pitch (rotation around the x-axis)
-		var pitch = asin(-direction.y) * 180 / PI
+	if direction.length() == 0:
+		return
+	var pitch = asin(-direction.y) * 180 / PI
 
-		# Ensure the pitch angle is within [-90, 90] degrees
-		pitch = clamp(pitch, -90.0, 90.0)
+	# Ensure the pitch angle is within [-90, 90] degrees
+	pitch = clamp(pitch, -90.0, 90.0)
 
-		# Apply pitch rotation to the bee
-		rotation_degrees.x = pitch
+	# Apply pitch rotation to the bee
+	rotation_degrees.x = pitch
 
-		# Convert the direction vector to a rotation in radians
-		var target_pitch = atan2(direction.x, direction.z) * 180 / PI
+	# Convert the direction vector to a rotation in radians
+	var target_yaw = atan2(direction.x, direction.z) * 180 / PI
 
-		# Ensure the target angle is within [0, 360] degrees
-		target_pitch = fmod(target_pitch + 180.0 + 360.0, 360.0)
+	# Ensure the target angle is within [0, 360] degrees
+	target_yaw = fmod(target_yaw + 180.0 + 360.0, 360.0)
 
-		# Calculate the angle difference between current and target angles
-		var current_pitch = rotation_degrees.y
-		var pitch_diff = target_pitch - current_pitch + 180.0
-		pitch_diff = fmod(pitch_diff + 180.0, 360.0) - 180.0
+	# Calculate the angle difference between current and target angles
+	var current_yaw = rotation_degrees.y
+	var yaw_diff = target_yaw - current_yaw + 180.0
+	yaw_diff = fmod(yaw_diff + 180.0, 360.0) - 180.0
 
-		# Choose the shortest rotation direction
-		if abs(pitch_diff) > 180:
-			pitch_diff -= 360.0 * sign(pitch_diff)
+	# Choose the shortest rotation direction
+	if abs(yaw_diff) > 180:
+		yaw_diff -= 360.0 * sign(yaw_diff)
 
-		# Smoothly rotate the bee towards the target angle
-		rotation_degrees.y += clamp(
-			pitch_diff, -max_rotation_speed * delta, max_rotation_speed * delta
-		)
+	# Smoothly rotate the bee towards the target angle
+	rotation_degrees.y += clamp(yaw_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
+
+	# Banking B)
+	rotation_degrees.z = -1 * clamp(yaw_diff*45, -45, 45)
 
 
 func _on_bee_area_entered(area: Area3D):
@@ -292,5 +297,4 @@ func _on_bee_area_entered(area: Area3D):
 	#If in pollen return to hive
 	if area.name == "flowerPollen":
 		get_node("GPUParticles3D").emitting = true
-		setStatusReturning(hive) 
-
+		setStatusReturning(hive)
