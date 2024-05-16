@@ -70,17 +70,6 @@ func setupWings():
 	wingRight.global_position.y -= tan(0.75) * 0.1
 
 
-func setupWings():
-	wingLeft = get_node("Bee Model/wingLeft")
-	wingRight = get_node("Bee Model/wingRight")
-
-	wingLeft.rotate_z(-0.75)
-	wingLeft.global_position.y += tan(-0.75) * 0.1
-
-	wingRight.rotate_z(0.75)
-	wingRight.global_position.y -= tan(0.75) * 0.1
-
-
 func _physics_process(delta):
 	if status == Status.Wandering:
 		var distFromHive = hive.global_transform.origin.distance_to(global_transform.origin)
@@ -90,35 +79,6 @@ func _physics_process(delta):
 	animateWings()
 	applyForce(delta)
 	applyRotation(delta)
-
-
-func animateWings():
-	var wingSpeed = acceleration.length() / 5
-
-	if flappingUp:
-		wingRotation += wingSpeed
-
-		wingLeft.rotate_z(wingSpeed)
-		wingLeft.global_position.y += tan(wingSpeed) * 0.15
-
-		wingRight.rotate_z(-wingSpeed)
-		wingRight.global_position.y -= tan(-wingSpeed) * 0.15
-
-		if wingRotation >= 1.5:
-			wingRotation = 0
-			flappingUp = false
-	else:  #Flapping down
-		wingRotation += wingSpeed
-
-		wingLeft.rotate_z(-wingSpeed)
-		wingLeft.global_position.y += tan(-wingSpeed) * 0.15
-
-		wingRight.rotate_z(wingSpeed)
-		wingRight.global_position.y -= tan(wingSpeed) * 0.15
-
-		if wingRotation >= 1.5:
-			wingRotation = 0
-			flappingUp = true
 
 
 func animateWings():
