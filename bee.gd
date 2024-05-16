@@ -55,9 +55,7 @@ func _ready():
 	#Get scene nodes
 	hive = get_parent()
 	exitTarget = hive.find_child("exitPoint")
-
 	setupWings()
-
 	setStatusArrive(exitTarget)
 
 
@@ -78,7 +76,6 @@ func _physics_process(delta):
 
 		if distFromHive > MAX_DIST_FROM_HIVE:
 			setStatusArrive(hive)
-
 	animateWings()
 	applyForce(delta)
 	applyRotation(delta)
@@ -275,7 +272,7 @@ func applyRotation(delta):
 	rotation_degrees.y += clamp(yaw_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
 
 	# Banking B)
-	rotation_degrees.z = -1 * clamp(yaw_diff*45, -45, 45)
+	rotation_degrees.z = -1 * clamp(yaw_diff * 45, -45, 45)
 
 
 func _on_bee_area_entered(area: Area3D):
