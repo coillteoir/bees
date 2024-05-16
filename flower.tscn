@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://dxbkia0bkekf6"]
+[gd_scene load_steps=28 format=3 uid="uid://dxbkia0bkekf6"]
 
 [ext_resource type="Script" path="res://flower.gd" id="1_tg66h"]
 
@@ -121,6 +121,9 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_57eok")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ps4g6"]
+albedo_color = Color(0.0784314, 0.670588, 0, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2eykv"]
 resource_name = "Leaf"
 cull_mode = 2
@@ -157,6 +160,9 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_a0pnb")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_13mqt"]
+albedo_color = Color(0.0781668, 0.67, 0, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gnuji"]
 resource_name = "Stem"
@@ -261,11 +267,13 @@ skeleton = NodePath("")
 transform = Transform3D(0.675062, -0.719206, -0.340473, 0.569726, 0.3666, 1.52309, -0.468726, -0.59021, 1.36093, -0.045826, 2.37001, 0.561224)
 mesh = SubResource("ArrayMesh_higxr")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_ps4g6")
 
 [node name="Leaf2" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.538597, -0.685076, -1.01567, -0.841391, 0.468014, 0.559568, 0.0444301, 0.558241, -1.71556, -0.196499, 1.76799, -0.66245)
 mesh = SubResource("ArrayMesh_1cq57")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_13mqt")
 
 [node name="Stem" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.349538, 0, 0, 0, 0.349538, 0, 0, 0, 0.349538, 2.86102e-06, 8.87777e-06, 0)
