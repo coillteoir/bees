@@ -8,7 +8,7 @@ var status: Status
 
 const MAX_DIST_FROM_HIVE = 20
 
-const MAX_FORCE: float = 10.0
+const MAX_FORCE: float = 20.0
 
 const mass = 1
 var vel: Vector3 = Vector3.ZERO

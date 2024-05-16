@@ -41,9 +41,10 @@ func _process(_delta):
 		generate_flower_patches()
 	if patch_count < patches.size():
 		var delete_index = randi_range(0, patches.size() - 1)
-		for item in patches[delete_index].flowers:
-			item.queue_free()
-		patches.erase(patches[delete_index])
+		if patches.size() != 0:
+			for item in patches[delete_index].flowers:
+				item.queue_free()
+			patches.erase(patches[delete_index])
 
 
 func validate_patch_point(new_point):
