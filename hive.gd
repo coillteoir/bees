@@ -1,6 +1,6 @@
 extends Node3D
 
-var BEES_MAX = 50
+var max_bees = 50
 var bee = preload("res://bee.tscn")
 var bees: Array = []
 
@@ -18,7 +18,7 @@ func _process(_delta):
 
 
 func _spawn_bee():
-	if bees.size() == BEES_MAX:
+	if bees.size() >= max_bees:
 		return
 	var bee_n = bee.instantiate()
 	add_child(bee_n)

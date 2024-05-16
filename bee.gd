@@ -1,32 +1,23 @@
 extends CharacterBody3D
 
-var movements: Array[Callable] = []
-
 #Boid properties
 enum Status { Wandering, Arriving, Returning }
-var status: Status
+enum Axis { Horizontal, Vertical }
 
 const MAX_DIST_FROM_HIVE = 400
 
 const MAX_FORCE: float = 20.0
 
-const mass = 1
-var vel: Vector3 = Vector3.ZERO
-var force: Vector3 = Vector3.ZERO
-var acceleration: Vector3 = Vector3.ZERO
-var speed: float
-var max_speed: float
-var max_rotation_speed: float = 350
+const MASS = 1
 
 const POLLEN_COLLECT_TIME = 3
 
 #Arrive vars
-var arriveTarget: Node3D = null
+
 const ARRIVE_MAX_SPEED = 10
 const SLOWING_DISTANCE = 30
 
 #Noise Wander Vars
-enum Axis { Horizontal, Vertical }
 
 const WANDER_AMP = 2000
 const WANDER_DIST = 5
@@ -35,112 +26,124 @@ const WANDER_FREQ = 0.3
 const WANDER_RADIUS = 10.0
 const WANDER_MAX_SPEED = 10
 
+var arrive_target: Node3D = null
+var movements: Array[Callable] = []
 var theta = 0
-var wanderTarget: Vector3
+var wander_target: Vector3
 var world_target: Vector3
 var noise: FastNoiseLite = FastNoiseLite.new()
 
 #Scene nodes
 var hive: Node3D
-var exitTarget: Node3D
-var wingLeft: MeshInstance3D
-var wingRight: MeshInstance3D
+var exit_target: Node3D
+var wing_left: MeshInstance3D
+var wing_right: MeshInstance3D
 
 #Wings
-var flappingUp = true
-var wingRotation = 0  #counter of how much wing's been rotated
+var flapping_up = true
+var wing_rotation = 0  #counter of how much wing's been rotated
+
+var status: Status
+
+# Velocity stuff
+var vel: Vector3 = Vector3.ZERO
+var force: Vector3 = Vector3.ZERO
+var acceleration: Vector3 = Vector3.ZERO
+var speed: float
+var max_speed: float
+var max_rotation_speed: float = 350
 
 
 func _ready():
 	#Get scene nodes
 	hive = get_parent()
-	exitTarget = hive.find_child("exitPoint")
-	setupWings()
-	setStatusArrive(exitTarget)
+	exit_target = hive.find_child("exitPoint")
+	setup_wings()
+	set_status_arrive(exit_target)
 
 
-func setupWings():
-	wingLeft = get_node("Bee Model/wingLeft")
-	wingRight = get_node("Bee Model/wingRight")
+func setup_wings():
+	wing_left = get_node("Bee Model/wingLeft")
+	wing_right = get_node("Bee Model/wingRight")
 
-	wingLeft.rotate_z(-0.75)
-	wingLeft.global_position.y += tan(-0.75) * 0.1
+	wing_left.rotate_z(-0.75)
+	wing_left.global_position.y += tan(-0.75) * 0.1
 
-	wingRight.rotate_z(0.75)
-	wingRight.global_position.y -= tan(0.75) * 0.1
+	wing_right.rotate_z(0.75)
+	wing_right.global_position.y -= tan(0.75) * 0.1
 
 
 func _physics_process(delta):
 	if status == Status.Wandering:
-		var distFromHive = hive.global_transform.origin.distance_to(global_transform.origin)
+		var dist_from_hive = hive.global_transform.origin.distance_to(global_transform.origin)
 
-		if distFromHive > MAX_DIST_FROM_HIVE:
-			setStatusArrive(hive)
-	animateWings()
-	applyForce(delta)
-	applyRotation(delta)
+		if dist_from_hive > MAX_DIST_FROM_HIVE:
+			set_status_arrive(hive)
+	animate_wings()
+	apply_force(delta)
+	apply_rotation(delta)
 
 
-func animateWings():
-	var wingSpeed = acceleration.length() / 5
+func animate_wings():
+	var wing_speed = acceleration.length() / 5
 
-	if flappingUp:
-		wingRotation += wingSpeed
+	if flapping_up:
+		wing_rotation += wing_speed
 
-		wingLeft.rotate_z(wingSpeed)
-		wingLeft.global_position.y += tan(wingSpeed) * 0.15
+		wing_left.rotate_z(wing_speed)
+		wing_left.global_position.y += tan(wing_speed) * 0.15
 
-		wingRight.rotate_z(-wingSpeed)
-		wingRight.global_position.y -= tan(-wingSpeed) * 0.15
+		wing_right.rotate_z(-wing_speed)
+		wing_right.global_position.y -= tan(-wing_speed) * 0.15
 
-		if wingRotation >= 1.5:
-			wingRotation = 0
-			flappingUp = false
+		if wing_rotation >= 1.5:
+			wing_rotation = 0
+			flapping_up = false
 	else:  #Flapping down
-		wingRotation += wingSpeed
+		wing_rotation += wing_speed
 
-		wingLeft.rotate_z(-wingSpeed)
-		wingLeft.global_position.y += tan(-wingSpeed) * 0.15
+		wing_left.rotate_z(-wing_speed)
+		wing_left.global_position.y += tan(-wing_speed) * 0.15
 
-		wingRight.rotate_z(wingSpeed)
-		wingRight.global_position.y -= tan(wingSpeed) * 0.15
+		wing_right.rotate_z(wing_speed)
+		wing_right.global_position.y -= tan(wing_speed) * 0.15
 
-		if wingRotation >= 1.5:
-			wingRotation = 0
-			flappingUp = true
+		if wing_rotation >= 1.5:
+			wing_rotation = 0
+			flapping_up = true
 
 
 func _arrive() -> Vector3:
 	# ensure target exists before continuing
-	if !is_instance_valid(arriveTarget):
-		arriveTarget = null
-		setStatusWander()
+	if !is_instance_valid(arrive_target):
+		arrive_target = null
+		set_status_wander()
 		return Vector3(0, 0, 0)
 
 	#get vector to target
-	var toTarget = arriveTarget.global_transform.origin - global_transform.origin
+	var to_target = arrive_target.global_transform.origin - global_transform.origin
 
 	#get distance to target
-	var distToTarget = toTarget.length()
+	var dist_to_target = to_target.length()
 
 	#if distance is less than 2, stop
-	if distToTarget < 2:
+	if dist_to_target < 2:
 		return Vector3.ZERO
 
 	#sets speed based on ratio between dist and slowingDistance, scaled to max_speed
-	var rampedSpeed = (distToTarget / SLOWING_DISTANCE) * max_speed
+	var ramped_speed = (dist_to_target / SLOWING_DISTANCE) * max_speed
 
 	#Limit speed
-	var limitedSpeed = min(max_speed, rampedSpeed)
+	var limited_speed = min(max_speed, ramped_speed)
 
 	#desired velcity vector to get to target
-	var desiredVel = (toTarget * limitedSpeed) / distToTarget
+	var desired_vel = (to_target * limited_speed) / dist_to_target
 
 	#returns steering force
-	return desiredVel - vel
+	return desired_vel - vel
 
 
-func _noiseWander() -> Vector3:
+func _noise_wander() -> Vector3:
 	#get noise value for current theta
 	var n = noise.get_noise_1d(theta)
 
@@ -154,77 +157,77 @@ func _noiseWander() -> Vector3:
 
 	#Calculate wander vector
 	if AXIS == Axis.Horizontal:
-		wanderTarget.x = sin(angle)
-		wanderTarget.y = 0
-		wanderTarget.z = cos(angle)
+		wander_target.x = sin(angle)
+		wander_target.y = 0
+		wander_target.z = cos(angle)
 		rot.z = 0
 	else:
-		wanderTarget.x = 0
-		wanderTarget.y = sin(angle)
-		wanderTarget.z = cos(angle)
+		wander_target.x = 0
+		wander_target.y = sin(angle)
+		wander_target.z = cos(angle)
 
 	#scale wander target by radius
-	wanderTarget *= WANDER_RADIUS
+	wander_target *= WANDER_RADIUS
 
-	var local_target = wanderTarget + (Vector3.BACK * WANDER_DIST)
+	var local_target = wander_target + (Vector3.BACK * WANDER_DIST)
 
 	var projected = Basis.from_euler(rot)
 
 	world_target = global_transform.origin + (projected * local_target)
 	theta += WANDER_FREQ * delta * PI * 2.0
 
-	var toTarget = world_target - global_transform.origin
-	toTarget = toTarget.normalized()
-	var desired = toTarget * max_speed
+	var to_target = world_target - global_transform.origin
+	to_target = to_target.normalized()
+	var desired = to_target * max_speed
 	return desired - vel
 
 
-func setStatusArrive(target):
+func set_status_arrive(target):
 	status = Status.Arriving
 	movements.clear()
 	movements.append(_arrive)
-	arriveTarget = target
+	arrive_target = target
 	max_speed = ARRIVE_MAX_SPEED
 
 
-func setStatusReturning(target):
+func set_status_returning(target):
 	status = Status.Returning
 	movements.clear()
 	movements.append(_arrive)
-	arriveTarget = target
+	arrive_target = target
 	max_speed = ARRIVE_MAX_SPEED
 
 
-func setStatusWander():
+func set_status_wander():
 	status = Status.Wandering
 
 	var rng = RandomNumberGenerator.new()
 	theta = rng.randf_range(0, 10.0)
 
 	movements.clear()
-	movements.append(_noiseWander)
+	movements.append(_noise_wander)
 	max_speed = WANDER_MAX_SPEED
 
 
 func calculate() -> Vector3:
-	var forceAccumulator = Vector3.ZERO
+	var force_accumulator = Vector3.ZERO
 
 	for i in range(movements.size()):
-		forceAccumulator += movements[i].call()
+		force_accumulator += movements[i].call()
 
 	#limit force
-	if forceAccumulator.length() > MAX_FORCE:
-		forceAccumulator = force.limit_length(MAX_FORCE)
+	if force_accumulator.length() > MAX_FORCE:
+		force_accumulator = force.limit_length(MAX_FORCE)
 
-	return forceAccumulator
+	return force_accumulator
 
 
-func applyForce(delta):
-	var newForce = calculate()
+func apply_force(delta):
+	var new_force = calculate()
 
-	force = lerp(force, newForce, delta)
+	force = lerp(force, new_force, delta)
 
-	acceleration = force / mass
+	acceleration = force / MASS
 
 	#multiply acceleration by delta (time since last frame) to account for inconsistent framerate
 	vel += acceleration * delta
@@ -238,7 +241,7 @@ func applyForce(delta):
 	move_and_slide()
 
 
-func applyRotation(delta):
+func apply_rotation(delta):
 	# Calculate the direction vector of movement based on the velocity
 	var direction = vel.normalized()
 
@@ -277,21 +280,21 @@ func applyRotation(delta):
 
 func _on_bee_area_entered(area: Area3D):
 	if area.name == "exitPoint" and status == Status.Arriving:
-		setStatusWander()
+		set_status_wander()
 
 	#If attracted by flower, start heading towards it
 	if area.name == "flowerAttraction" and status == Status.Wandering:
 		var flower = area.get_parent()
-		var flowerTarget = flower.get_node("Pollen")
+		var flower_target = flower.get_node("Pollen")
 
 		if flower.is_pollinated():
 			flower.set_pollination(false)
 			print("POLLEN TAKEN")
-			setStatusArrive(flowerTarget)
+			set_status_arrive(flower_target)
 		else:
 			print("NO POLLEN")
 
 	#If in pollen return to hive
 	if area.name == "flowerPollen":
 		get_node("GPUParticles3D").emitting = true
-		setStatusReturning(hive)
+		set_status_returning(hive)

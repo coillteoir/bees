@@ -1,33 +1,24 @@
 extends Node3D
 
-# Defines the number of patches to spawn.
-@export var patch_count: int = 15
-
 
 class Patch:
 	var point: Vector2
 	var flowers: Array
 
 
-# Defines the minimum distance between flowers.
-const flower_min_distance: int = 7
-# Defines the maximum amount of flowers per patch.
-const max_flowers_per_patch: int = 10
-# Defines the radius around the patch center flowers may spawn.
-const flower_area: int = 12
-# Defines the minimum distance between patches.
-const patch_min_distance: int = 35
-# Defines the radius around the buffer where no patches will spawn.
-const hive_buffer: int = 20
+const FLOWER_MIN_DISTANCE: int = 7
 
-var patches: Array = []
+const MAX_FLOWERS_PER_PATCH: int = 10
+# the radius around the patch center flowers may spawn.
+const FLOWER_AREA: int = 12
+# minimum distance between patches.
+const PATCH_MIN_DISTANCE: int = 35
+# radius around the buffer where no patches will spawn.
+const HIVE_BUFFER: int = 20
 
-# Defines the max distance from the hive that a patch can be.
-var patch_area: float = hive_buffer + flower_area
+const FLOWER_TEMPLATE: PackedScene = preload("res://flower.tscn")
 
-const flower_template: PackedScene = preload("res://flower.tscn")
-
-const colors: Array = [
+const COLORS: Array = [
 	# Blue
 	Color(0.125, 0.698, 0.666),
 	# Yellow
@@ -37,6 +28,10 @@ const colors: Array = [
 	# Red
 	Color(1, 0.27, 0),
 ]
+
+var patch_count: int = 15
+var patches: Array = []
+var patch_area: float = HIVE_BUFFER + FLOWER_AREA
 
 
 func _init():
@@ -61,7 +56,7 @@ func _process(_delta):
 func validate_patch_point(new_point):
 	# Check if the new point is at least min_distance away from existing points
 	for patch in patches:
-		if new_point.distance_to(patch.point) < patch_min_distance:
+		if new_point.distance_to(patch.point) < PATCH_MIN_DISTANCE:
 			return false
 	return true
 
@@ -71,15 +66,15 @@ func validate_flower_point(new_point, new_flowers):
 	for flower in new_flowers:
 		if (
 			new_point.distance_to(Vector2(flower.global_position.x, flower.global_position.z))
-			< flower_min_distance
+			< FLOWER_MIN_DISTANCE
 		):
 			return false
 	return true
 
 
 # Function to generate flowers coordinates
-# Flower coordinates are generated with at least "flower_min_distance" away from eachother
-# Flower coordinates are generated within a bounding area "flower_area"
+# Flower coordinates are generated with at least "FLOWER_MIN_DISTANCE" away from eachother
+# Flower coordinates are generated within a bounding area "FLOWER_AREA"
 # Flower coordinates are generated with at least "flower_hive_distance" away from the origin (0,0)
 func generate_flower_patches():
 	var fail_count = 0
@@ -95,34 +90,35 @@ func generate_flower_patches():
 		)
 
 		# Check if the new point is at least min_distance_origin away from the origin (0, 0)
-		if !validate_patch_point(patch.point) or patch.point.length() < hive_buffer:
+		if !validate_patch_point(patch.point) or patch.point.length() < HIVE_BUFFER:
 			fail_count += 1
 			continue
 
-		var num_flowers: int = randi_range(max_flowers_per_patch / 2, max_flowers_per_patch)
+		var num_flowers: int = randi_range(MAX_FLOWERS_PER_PATCH / 2, MAX_FLOWERS_PER_PATCH)
 		patch.flowers = []
 		while patch.flowers.size() < num_flowers:
 			var flower_point: Vector2 = Vector2(
-				randf_range(patch.point.x - (flower_area), patch.point.x + (flower_area)),
-				randf_range(patch.point.y - (flower_area), patch.point.y + (flower_area))
+				randf_range(patch.point.x - (FLOWER_AREA), patch.point.x + (FLOWER_AREA)),
+				randf_range(patch.point.y - (FLOWER_AREA), patch.point.y + (FLOWER_AREA))
 			)
 
 			# Check if the new point is at least min_distance_origin away from the origin (0, 0)
 			if !validate_flower_point(flower_point, patch.flowers):
 				continue
 
-			var new_flower = flower_template.instantiate()
+			var new_flower = FLOWER_TEMPLATE.instantiate()
 			add_child(new_flower)
 			new_flower.global_position.x = flower_point.x
 			new_flower.global_position.z = flower_point.y
 			new_flower.global_position.y = randi_range(0, 5)
 
 			var material = new_flower.get_node("Petals").get_active_material(0).duplicate()
-			var color = colors[randi_range(0, colors.size() - 1)]
+			var color = COLORS.pick_random()
 			print(color)
 			material.albedo_color = color
 			print(material.albedo_color)
 			new_flower.get_node("Petals").set_surface_override_material(0, material)
 			patch.flowers.append(new_flower)
+
 		patches.append(patch)
 		fail_count = 0

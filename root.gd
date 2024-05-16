@@ -28,9 +28,9 @@ func _process(_delta):
 	if Input.is_action_just_pressed("music_enable"):
 		$BGM.stream_paused = !$BGM.stream_paused
 
-	if $HUD/VBoxContainer/bee_count.value != $Hive.BEES_MAX:
+	if $HUD/VBoxContainer/bee_count.value != $Hive.max_bees:
 		print("RECONCILING bees:", $HUD/VBoxContainer/bee_count.value)
-		$Hive.BEES_MAX = $HUD/VBoxContainer/bee_count.value
+		$Hive.max_bees = $HUD/VBoxContainer/bee_count.value
 	if $HUD/VBoxContainer/flower_count.value != $Garden.patch_count:
 		print("RECONCILING flowers:", $HUD/VBoxContainer/flower_count.value)
 		$Garden.patch_count = $HUD/VBoxContainer/flower_count.value
