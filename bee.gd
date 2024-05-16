@@ -275,7 +275,7 @@ func applyRotation(delta):
 	rotation_degrees.y += clamp(yaw_diff, -max_rotation_speed * delta, max_rotation_speed * delta)
 
 	# Banking B)
-	rotation_degrees.z = -1 * clamp(yaw_diff*45, -45, 45)
+	rotation_degrees.z = -1 * clamp(yaw_diff * 45, -45, 45)
 
 
 func _on_bee_area_entered(area: Area3D):
