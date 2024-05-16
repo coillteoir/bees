@@ -7,6 +7,6 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	$bee_label.text = "Bees: %s" % $bee_count.value
 	$flower_label.text = "Flowers: %s" % $flower_count.value

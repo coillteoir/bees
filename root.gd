@@ -25,6 +25,9 @@ func _process(_delta):
 			1:
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 				find_child("CreativeMode").find_child("Camera3D").current = true
+	if Input.is_action_just_pressed("music_enable"):
+		$BGM.stream_paused = !$BGM.stream_paused
+
 	if $HUD/VBoxContainer/bee_count.value != $Hive.BEES_MAX:
 		print("RECONCILING bees:", $HUD/VBoxContainer/bee_count.value)
 		$Hive.BEES_MAX = $HUD/VBoxContainer/bee_count.value

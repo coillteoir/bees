@@ -12,11 +12,7 @@ config_version=5
 
 config/name="Bees"
 run/main_scene="res://root.tscn"
-config/features=PackedStringArray("4.2")
-
-[debug_draw_3d]
-
-settings/telemetry_state=1
+config/features=PackedStringArray("4.1")
 
 [input]
 

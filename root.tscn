@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cw4wwuxjartg5"]
+[gd_scene load_steps=15 format=3 uid="uid://cw4wwuxjartg5"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_bxopo"]
 [ext_resource type="PackedScene" uid="uid://7aqhehv0sjx3" path="res://hive.tscn" id="2_croj8"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://demi4pcswp7n5" path="res://resources/sky1.png" id="4_fc3y0"]
 [ext_resource type="AudioStream" uid="uid://d207ajtons0ts" path="res://resources/HoneyhiveMusic.mp3" id="5_6g1yg"]
 [ext_resource type="PackedScene" uid="uid://djjdndawhmypm" path="res://garden.tscn" id="5_avpcf"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_rqiea"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_666qa"]
 albedo_color = Color(0.4, 0.682353, 0.235294, 1)
@@ -47,6 +49,9 @@ transform = Transform3D(-4.37114e-08, -0.5, 0.866025, 0, 0.866025, 0.5, -1, 2.18
 script = ExtResource("4_4x4i3")
 
 [node name="Camera3D" type="Camera3D" parent="CreativeMode"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CreativeMode"]
+shape = SubResource("SphereShape3D_rqiea")
 
 [node name="HUD" parent="." instance=ExtResource("4_2ieva")]
 

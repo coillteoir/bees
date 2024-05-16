@@ -3,7 +3,7 @@ extends CharacterBody3D
 @export var forward: bool = true
 @export var closest: bool = true
 
-var SPEED = 1
+const SPEED = 1
 
 var movements: Array[Callable] = []
 
