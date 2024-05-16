@@ -43,8 +43,8 @@ var noise: FastNoiseLite = FastNoiseLite.new()
 #Scene nodes
 var hive: Node3D
 var exitTarget: Node3D
-var wingLeft: MeshInstance3D
-var wingRight: MeshInstance3D
+var wingLeft: Node3D
+var wingRight: Node3D
 
 #Wings
 var flappingUp = true
@@ -60,14 +60,14 @@ func _ready():
 
 
 func setupWings():
-	wingLeft = get_node("Bee Model/wingLeft")
-	wingRight = get_node("Bee Model/wingRight")
+	wingLeft = get_node("Bee Model/wingLeftRot")
+	wingRight = get_node("Bee Model/wingRightRot")
 
 	wingLeft.rotate_z(-0.75)
-	wingLeft.position.y += tan(-0.75) * 0.125
+	#wingLeft.position.y += tan(-0.75) * 0.125
 
 	wingRight.rotate_z(0.75)
-	wingRight.position.y -= tan(0.75) * 0.125
+	#wingRight.position.y -= tan(0.75) * 0.125
 
 
 func _physics_process(delta):
@@ -90,10 +90,10 @@ func animateWings():
 		wingRotation += wingSpeed
 
 		wingLeft.rotate_z(wingSpeed)
-		wingLeft.position.y += tan(wingSpeed) * wingPosMultiplier
+		#wingLeft.position.y += tan(wingSpeed) * wingPosMultiplier
 
 		wingRight.rotate_z(-wingSpeed)
-		wingRight.position.y -= tan(-wingSpeed) * wingPosMultiplier
+		#wingRight.position.y -= tan(-wingSpeed) * wingPosMultiplier
 
 		if wingRotation >= maxRotation:
 			wingRotation = 0
@@ -102,10 +102,10 @@ func animateWings():
 		wingRotation += wingSpeed
 
 		wingLeft.rotate_z(-wingSpeed)
-		wingLeft.position.y += tan(-wingSpeed) * wingPosMultiplier
+		#wingLeft.position.y += tan(-wingSpeed) * wingPosMultiplier
 
 		wingRight.rotate_z(wingSpeed)
-		wingRight.position.y -= tan(wingSpeed) * wingPosMultiplier
+		#wingRight.position.y -= tan(wingSpeed) * wingPosMultiplier
 
 		if wingRotation >= maxRotation:
 			wingRotation = 0
