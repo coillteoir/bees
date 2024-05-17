@@ -30,7 +30,7 @@ text = "bee"
 layout_mode = 2
 min_value = 1.0
 max_value = 20.0
-value = 10.0
+value = 5.0
 ticks_on_borders = true
 
 [connection signal="value_changed" from="VBoxContainer/flower_count" to="VBoxContainer/flower_count" method="_on_value_changed"]

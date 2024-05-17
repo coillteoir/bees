@@ -117,6 +117,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -2, 0)
 shape = SubResource("SphereShape3D_246ix")
 
 [node name="DEBUG_Exit_Mesh" type="MeshInstance3D" parent="exitPoint"]
+visible = false
 mesh = SubResource("SphereMesh_hhx4w")
 surface_material_override/0 = SubResource("StandardMaterial3D_5arvb")
 
