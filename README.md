@@ -22,10 +22,8 @@ To explore the garden yourself, press enter. This will change to a first person 
 |SHIFT|Down|
 
 # References
-|Resource|Source|
-|--|--|
-|Skybox|https://github.com/rpgwhitelock/AllSkyFree_Godot|
-|BGM|https://youtu.be/_KwOh88Z-VI?si=dWQHKlkrpT146FG7|
+[Skybox](https://github.com/rpgwhitelock/AllSkyFree_Godot)
+[BGM](https://youtu.be/_KwOh88Z-VI?si=dWQHKlkrpT146FG7)
 
 Subversions denote milestones in the project, each of these must meet a level of acceptance criteria.
 
@@ -58,12 +56,17 @@ Subversions denote milestones in the project, each of these must meet a level of
 - UI/Editor Exports allows decent control over features
 - CI passing
 
-# Completed
+# Features implemented
 - Spawning flowers on init
 - - "flower_count" decides the number of flower that should be spawned.
 - - Flower coordinates are generated with at least "flower_min_distance" away from eachother
 - - Flower coordinates are generated within a bounding area "flower_area"
 - - Flower coordinates are generated with at least "flower_hive_distance" away from the origin (0,0)
+- - Flowers spawn with randomly selected colours.
+- Flowers manage their own resources, and replenish pollen periodically.
+- Bees retrieve pollen from flowers, and bring pollen back to the hive.
+- Fixed and dynamic camera using 3D character controller.
+
 
 - Custom Hive & Bee meshes
 - - Both meshes custom made in blender v3.6
