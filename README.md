@@ -19,7 +19,8 @@ To explore the garden yourself, press enter. This will change to a first person 
 |W|Forward|
 |S|Back|
 |SPACE|Up|
-|SHIFT|Down|
+|CTRL|Down|
+|SHIFT|Fast Movement|
 
 # References
 [Skybox](https://github.com/rpgwhitelock/AllSkyFree_Godot)
@@ -68,5 +69,8 @@ Subversions denote milestones in the project, each of these must meet a level of
 - Fixed and dynamic camera using 3D character controller.
 
 
-- Custom Hive & Bee meshes
-- - Both meshes custom made in blender v3.6
+- Custom Hive, Bee and Flower meshes
+- - All custom made in blender v3.6
+
+# Video
+https://youtu.be/Sh4RQ2U0a24
