@@ -68,6 +68,10 @@ To explore the garden yourself, press ALT. This will change to a first person ca
 |  |  |  | _on_bee_area_entered(area: Area3D) - Used to detect when bees reach the "exitPoint" of the hive or enter the attraction sphere, or pollen sphere of flowers. When the exit point of the hive is reached, the bee's boid behavior is set to "Wandering". When the attraction sphere of a flower is entered, the bee's boid behavior is set to "Arriving" with the flower's pollen as it's target. When the pollen sphere of a flower is entered, the bee's boid behavior is set to "Returning" with the hive as it's target. |
 |  |  |  |  |
 | garden | The "garden" class is used to store data relating to flowers and flower patches, as well as dynamically spawning flowers and flower patches. | patch_count: int - Stores of the number of flower patches that should be instantiated. | _ready() - This method is used to initiate the generation of flower patches when the garden is instantiated. |
+|  |  |  | _process() - This method is used to check that the correct number of flower patches are currently instantiated. If the number is too low, new flower patches will be generated. If the number is too high, flower patches will be freed from memory. |
+|  |  |  | _validate_patch_point() - This method checks if a patch point is valid or not. |
+|  |  |  | _validate_flower_point() - This method checks if a flower point is valid or not. |
+|  |  |  | generate_flower_patches() - This method generates the coordinates for patches and flowers to be spawned on. |
 
 # Team Member Contributions
 
