@@ -131,6 +131,10 @@ The angle that a bee's wings will rotate each frame is calculated based off the 
 |  |  |  | _validate_flower_point() - This method checks if a flower point is valid or not. |
 |  |  |  | generate_flower_patches() - This method generates the coordinates for patches and flowers to be spawned on. |
 
+# References
+[Skybox](https://github.com/rpgwhitelock/AllSkyFree_Godot)
+[BGM](https://youtu.be/_KwOh88Z-VI?si=dWQHKlkrpT146FG7)
+
 # Team Member Contributions
 ## Luke Moss Hughes (C20487654)
 ### What I Did
