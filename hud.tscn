@@ -1,6 +1,19 @@
 [gd_scene load_steps=2 format=3 uid="uid://bjonjgs57cskl"]
 
-[ext_resource type="Script" path="res://VBoxContainer.gd" id="1_xuqmr"]
+[sub_resource type="GDScript" id="GDScript_m32lh"]
+script/source = "extends VBoxContainer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta):
+	$bee_label.text = \"Bees: %s\" % $bee_count.value
+	$flower_label.text = \"Flowers: %s\" % $flower_count.value
+"
 
 [node name="MarginContainer" type="MarginContainer"]
 offset_top = 275.0
@@ -9,7 +22,7 @@ offset_bottom = 329.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
-script = ExtResource("1_xuqmr")
+script = SubResource("GDScript_m32lh")
 
 [node name="flower_label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
