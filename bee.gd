@@ -18,8 +18,6 @@ var speed: float
 var max_speed: float
 var max_rotation_speed: float = 350
 
-const POLLEN_COLLECT_TIME = 3
-
 #Arrive vars
 var arriveTarget: Node3D = null
 const ARRIVE_MAX_SPEED = 10

@@ -1,25 +1,35 @@
 # Bees
 ## Group (The Bee Boys)
-Name: Luke Moss Hughes 
-
-Student Number: C20487654
-
-
-Name: James Clarke
-
-Student Number: C20375736
-
-
-Name: David Lynch
-
-Student Number: C19500876
+| Name | Student Number |
+| ---- | -------------- |
+| Luke Moss Hughes | C20487654 |
+| James Clarke | C20375736 |
+| David Lynch | C19500876 |
 
 # Description
+Our project is a simulation of bee behavior using boids.
+
+The map consists of a beehive at the center, surrounded by patches of flowers.
+
+Bees will exit the hive over time and roam the map looking for pollen. When a bee finds a pollinated flower, the bee collects the pollen and brings it back to the hive. The flower’s pollen will then replenish over time.
+
+Sliders on the screen control the amount of bees and the amount of flower patches in the world.
 
 ## Video
 [![YouTube](https://i3.ytimg.com/vi/Sh4RQ2U0a24/maxresdefault.jpg)](https://youtu.be/Sh4RQ2U0a24)
 
 ## Screenshots
+### Bees Exiting Hive
+![Bees Exiting Hive](Screenshots/ExitingHive.PNG)
+
+### Sample Map Overview
+![Sample Map Overview](Screenshots/MapOverview.PNG)
+
+### Pollinating Flower
+![Pollinating Flower](Screenshots/PollinatingFlower.PNG)
+
+### Bee Closeup
+![Bee Closeup](Screenshots/BeeCloseup.PNG)
 
 # Instructions
 Once you enter the simulation, there is a fixed camera above the scene. Here you can edit the sliders to control variables in the simulation
@@ -68,6 +78,8 @@ When the bees are first spawned, they implement a “noise wander” boid behavi
 When the bee enters the pollen (center of the flower), its behavior will be set to arrive with the hive as the target, as the bee returns with its collected pollen. Yellow particles will be applied to the bee to signify that it is carrying pollen.
 
 When the bee makes contact with the hive, the hive will despawn the bee.
+
+If the bee's distance from the hive ever eclipses the MAX_DIST_FROM_HIVE constant, the bee will enter the arrive behavior with the target set to hive.
 
 ### Rotation
 1. Pitch
@@ -122,19 +134,36 @@ The angle that a bee's wings will rotate each frame is calculated based off the 
 |  |  | bee: PackedScene - Holds a PackedScene/Resource that points to bee.tscn. Used to instantiate bees. | _on_timer_timeout() - Triggered every 2.5 seconds by a timer, calls the _spawn_bee() function. |
 |  |  | bees: Array - Holds all instances of bees. | _on_area_3d_area_entered(area: Area3D) - Used to detect when bees collide with the hive and call queue_free() to despawn and free the bee instance from memory. |
 |||||
-| bee | The "bee" class is a boid. Bee's arrive at the "exitPoint" of the hive after spawning. When a bee reaches the exit point it will start wandering. When they find a pollinated flower, they take the pollen and "arrive" at the hive. |  | _ready() - In this method, some variables are set and the bee is set to arrive at the "exitPoint" of the hive. |
-|  |  |  | SetupWings() - This method stores the wings of the boid in variables and rotates them to their starting angle. |
-|  |  |  | _physics_process(delta) -  This method runs 60 times per second. It calls the "animateWings", "applyForce", and "applyRotation" methods to make changes to the bee boid over time. It ensures bee return to the hive if they wander too far from it with "setStatusArrive(hive)" |
-|  |  |  | animateWings() - This method is used to programmatically animate the wings of bee's. This approach was chosen over using an animatableBody3D, due to time constraints. |
-|  |  |  | _arrive() - This method calculates the force applied to bees when arriving at a target. |
-|  |  |  | _noiseWander() - This method calculates the force applied to bees when wandering. |
-|  |  |  | setStatusArrive(target) - This method changes the boid behavior of a bee to "Arriving" at a target. |
-|  |  |  | setStatusReturning(target) - This method changes the void behavior of a bee to "Returning" at a target. |
-|  |  |  | setStatusWander() - This method changes the boid behavior of a bee to "Wandering". |
-|  |  |  | calculate() - This method integrates the forces from each active boid behavior into an accumalated force, used to change the velocity of the bee. |
-|  |  |  | applyForce(delta) - This method applies changes in force to the bee. |
-|  |  |  | applyRotation(delta) - This method applies rotations to the pitch, yaw, and roll of the bee based on it's velocity. |
-|  |  |  | _on_bee_area_entered(area: Area3D) - Used to detect when bees reach the "exitPoint" of the hive or enter the attraction sphere, or pollen sphere of flowers. When the exit point of the hive is reached, the bee's boid behavior is set to "Wandering". When the attraction sphere of a flower is entered, the bee's boid behavior is set to "Arriving" with the flower's pollen as it's target. When the pollen sphere of a flower is entered, the bee's boid behavior is set to "Returning" with the hive as it's target. |
+| bee | The "bee" class is a boid. Bee's arrive at the "exitPoint" of the hive after spawning. When a bee reaches the exit point it will start wandering. When they find a pollinated flower, they take the pollen and "arrive" at the hive. | movements: Array[Callable] - Holds each behavior that the boid will implement each frame. | _ready() - In this method, some variables are set and the bee is set to arrive at the "exitPoint" of the hive. |
+|  |  | status: enum - Keeps track of the state the bee is currently in, can be Wandering, Arriving or Returning. | SetupWings() - This method stores the wings of the boid in variables and rotates them to their starting angle. |
+|  |  | MAX_DIST_FROM_HIVE: int - The maximum distance a bee can be from the hive before returning to the hive. | _physics_process(delta) -  This method runs 60 times per second. It calls the "animateWings", "applyForce", and "applyRotation" methods to make changes to the bee boid over time. It ensures bee return to the hive if they wander too far from it with "setStatusArrive(hive)" |
+|  |  | MAX_FORCE: float -The maximum force that can be applied to the bee boid. | animateWings() - This method is used to programmatically animate the wings of bee's. This approach was chosen over using an animatableBody3D, due to time constraints. |
+|  |  | mass: int - The mass of the bee boid. | _arrive() - This method calculates the force applied to bees when arriving at a target. |
+|  |  | vel: Vector3 - The velocity of the bee boid. | _noiseWander() - This method calculates the force applied to bees when wandering. |
+|  |  | force: Vector3 - The force being applied to the bee boid. | setStatusArrive(target) - This method changes the boid behavior of a bee to "Arriving" at a target. |
+|  |  | acceleration: Vector3 - The acceleration being applied to the bee boid. | setStatusReturning(target) - This method changes the void behavior of a bee to "Returning" at a target. |
+|  |  | speed: float - The speed of the bee boid (magnitude of the velocity vector). | setStatusWander() - This method changes the boid behavior of a bee to "Wandering". |
+|  |  | max_speed: float - The maximum speed the bee boid can have. | calculate() - This method integrates the forces from each active boid behavior into an accumalated force, used to change the velocity of the bee. |
+|  |  | max_rotation_speed - The max banking speed the bee boid can have. | applyForce(delta) - This method applies changes in force to the bee. |
+|  |  | arriveTarget: Node3D - The target that the bee will arrive to. | applyRotation(delta) - This method applies rotations to the pitch, yaw, and roll of the bee based on it's velocity. |
+|  |  | ARRIVE_MAX_SPEED: float - The maximum speed that the bee boid will arrive at. | _on_bee_area_entered(area: Area3D) - Used to detect when bees reach the "exitPoint" of the hive or enter the attraction sphere, or pollen sphere of flowers. When the exit point of the hive is reached, the bee's boid behavior is set to "Wandering". When the attraction sphere of a flower is entered, the bee's boid behavior is set to "Arriving" with the flower's pollen as it's target. When the pollen sphere of a flower is entered, the bee's boid behavior is set to "Returning" with the hive as it's target. |
+|  |  | SLOWING_DISTANCE: float - The speed that that the bee boid will slow at while arriving at target. |  |
+|  |  | WANDER_AMP: int - A speed multiplier for noise wander. |  |
+|  |  | WANDER_DIST: int - distance multiplier used in noise wander. |  |
+|  |  | AXIS: enum - The axis on which noise wander is applied, this is set to horizontal for our simulation. |  |
+|  |  | WANDER_FREQ: float - Frequency value used in noise wander. |  |
+|  |  | WANDER_RADIUS: float - Radius value used in noise wander. |  |
+|  |  | WANDER_MAX_SPEED: float - Max speed of the noise wander behavior. |  |
+|  |  | theta: float - angle used in noise wander. |  |
+|  |  | wanderTarget: Vector3 - The target used in noise wander. |  |
+|  |  | worldTarget: Vector3 - World target used in noise wander. |  |
+|  |  | noise: FastNoiseLite - Perlin noise used in noise wander. |  |
+|  |  | hive: Node3D - The hive scene node. |  |
+|  |  | exitTarget: Node3D - The point which bees move towards after spawning. |  |
+|  |  | wingLeft: Node3D - The left wing of the bee. |  |
+|  |  | wingRight: Node3D - The right wing of the bee. |  |
+|  |  | flappingUp: boolean - direction the wings are flapping (if false wings are flapping down). |  |
+|  |  | wingRotation: float - The total amount the wings have rotated. |  |
 |  |  |  |  |
 | Patch | Stores the coordinates of a patch and an array of the flowers that are members of that patch. | point: Vector2 - Stores the coordinated of the patch. |  |
 |  |  | flowers: Array - Stores instances of all flowers that are members of the patch. |  |
@@ -166,7 +195,6 @@ The angle that a bee's wings will rotate each frame is calculated based off the 
 | Hive Model.gltf | GLTF 2.0 | Hive mesh custom made in Blender 3.6. |
 | HoneyHiveMusic.mp3 | MP3 | Background music sampled from the game Super Mario Galaxy. |
 | sky1.png | PNG | Used as a skybox panaroma. |
-
 
 # Team Member Contributions
 ## Luke Moss Hughes (C20487654)
@@ -214,6 +242,28 @@ I am proud of setting up continuous integration, and seeing the speed of feature
 
 ### What I Learned
 I learned how to effectively resolve merge conflicts with godot scenes, and how to manage loading and unloading scene instances.
+
+# Project Planning
+Before starting on the project, the features we wanted to achieve were defind and sorted into stages of project.
+
+## V0.1
+- Bee Wandering
+- Beee spawning from hive
+- Fixed Camera
+- Spawning flowers on init
+
+## V0.2
+- Arriving to flowers, and taking nectar back to hive
+- Creative mode camera
+
+## V0.3
+- Manage flower resource and pollen replenishment
+- Patches of flowers (collections of flowers)
+
+## Future Development
+- Bee POV camera
+- Hive memory of flowers that have been found (Some bees will then go directely from the hive to a found flower)
+- When it rains bees go back to hive
 
 
 
