@@ -65,6 +65,8 @@ When the bee enters the pollen (center of the flower), its behavior will be set 
 
 When the bee makes contact with the hive, the hive will despawn the bee.
 
+If the bee's distance from the hive ever eclipses the MAX_DIST_FROM_HIVE constant, the bee will enter the arrive behavior with the target set to hive.
+
 ### Banking
 
 ### Wing Animation
@@ -133,6 +135,28 @@ I am proud of setting up continuous integration, and seeing the speed of feature
 
 ### What I Learned
 I learned how to effectively resolve merge conflicts with godot scenes, and how to manage loading and unloading scene instances.
+
+# Project Planning
+Before starting on the project, the features we wanted to achieve were defind, and sorted into stages of project
+
+## V0.1
+- Bee Wandering
+- Beee spawning from hive
+- Fixed Camera
+- Spawning flowers on init
+
+## V0.2
+- Arriving to flowers, and taking nectar back to hive
+- Creative mode camera
+
+## V0.3
+- Manage flower resource and pollen replenishment
+- Patches of flowers (collections of flowers)
+
+## Future Development
+- Bee POV camera
+- Hive memory of flowers that have been found (Some bees will then go directely from the hive to a found flower)
+- When it rains bees go back to hive
 
 
 
