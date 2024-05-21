@@ -1,12 +1,16 @@
 # Bees
 ## Group (The Bee Boys)
 Name: Luke Moss Hughes
+
 Student Number: C20487654
 
+
 Name: James Clarke
+
 Student Number: C20375736
 
 Name: David Lynch
+
 Student Number: C19500876
 
 # Description
