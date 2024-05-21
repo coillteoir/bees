@@ -164,7 +164,7 @@ I am proud of setting up continuous integration, and seeing the speed of feature
 I learned how to effectively resolve merge conflicts with godot scenes, and how to manage loading and unloading scene instances.
 
 # Project Planning
-Before starting on the project, the features we wanted to achieve were defind, and sorted into stages of project
+Before starting on the project, the features we wanted to achieve were defind and sorted into stages of project.
 
 ## V0.1
 - Bee Wandering
