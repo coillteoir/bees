@@ -19,16 +19,16 @@ Sliders on the screen control the amount of bees and the amount of flower patche
 [![YouTube](https://i3.ytimg.com/vi/Sh4RQ2U0a24/maxresdefault.jpg)](https://youtu.be/Sh4RQ2U0a24)
 
 ## Screenshots
-## Bees Exiting Hive
+### Bees Exiting Hive
 ![Bees Exiting Hive](Screenshots/ExitingHive.PNG)
 
-## Sample Map Overview
+### Sample Map Overview
 ![Sample Map Overview](Screenshots/MapOverview.PNG)
 
-## Pollinating Flower
+### Pollinating Flower
 ![Pollinating Flower](Screenshots/PollinatingFlower.PNG)
 
-## Bee Closeup
+### Bee Closeup
 ![Bee Closeup](Screenshots/BeeCloseup.PNG)
 
 # Instructions
