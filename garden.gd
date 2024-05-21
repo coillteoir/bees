@@ -17,7 +17,7 @@ const max_flowers_per_patch: int = 10
 const flower_area: int = 12
 # Defines the minimum distance between patches.
 const patch_min_distance: int = 35
-# Defines the radius around the buffer where no patches will spawn.
+# Defines the radius around the hive where no patches will spawn.
 const hive_buffer: int = 20
 
 var patches: Array = []
