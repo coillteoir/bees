@@ -80,7 +80,6 @@ func _physics_process(delta):
 
 
 func animateWings():
-	const wingPosMultiplier = 0.15
 	const maxRotation = 1.5
 	var wingSpeed = acceleration.length() / 10
 
