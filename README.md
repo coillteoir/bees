@@ -1,5 +1,5 @@
 # Bees
-## Group (Bee Boys)
+## Group (The Bee Boys)
 Name: Luke Moss Hughes
 Student Number: C20487654
 
@@ -8,6 +8,11 @@ Student Number: C20375736
 
 Name: David Lynch
 Student Number: C19500876
+
+# Description
+
+## Video
+[![YouTube](https://i3.ytimg.com/vi/Sh4RQ2U0a24/maxresdefault.jpg)](https://youtu.be/Sh4RQ2U0a24)
 
 # Controls
 Once you enter the simulation, there is a fixed camera above the scene.
@@ -80,5 +85,4 @@ Subversions denote milestones in the project, each of these must meet a level of
 - Custom Hive, Bee and Flower meshes
 - - All custom made in blender v3.6
 
-# Video
-https://youtu.be/Sh4RQ2U0a24
+
