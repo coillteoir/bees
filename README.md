@@ -7,6 +7,13 @@
 | David Lynch | C19500876 |
 
 # Description
+Our project is a simulation of bee behavior using boids.
+
+The map consists of a beehive at the center, surrounded by patches of flowers.
+
+Bees will exit the hive over time and roam the map looking for pollen. When a bee finds a pollinated flower, the bee collects the pollen and brings it back to the hive. The flower’s pollen will then replenish over time.
+
+Sliders on the screen control the amount of bees and the amount of flower patches in the world.
 
 ## Video
 [![YouTube](https://i3.ytimg.com/vi/Sh4RQ2U0a24/maxresdefault.jpg)](https://youtu.be/Sh4RQ2U0a24)
