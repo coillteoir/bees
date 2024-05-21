@@ -20,6 +20,17 @@ Student Number: C19500876
 [![YouTube](https://i3.ytimg.com/vi/Sh4RQ2U0a24/maxresdefault.jpg)](https://youtu.be/Sh4RQ2U0a24)
 
 ## Screenshots
+## Bees Exiting Hive
+![Bees Exiting Hive](Screenshots/ExitingHive.PNG)
+
+## Sample Map Overview
+![Sample Map Overview](Screenshots/MapOverview.PNG)
+
+## Pollinating Flower
+![Pollinating Flower](Screenshots/PollinatingFlower.PNG)
+
+## Bee Closeup
+![Bee Closeup](Screenshots/BeeCloseup.PNG)
 
 # Instructions
 Once you enter the simulation, there is a fixed camera above the scene. Here you can edit the sliders to control variables in the simulation
