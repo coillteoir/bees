@@ -188,13 +188,13 @@ The angle that a bee's wings will rotate each frame is calculated based off the 
 |  |  | relative: Vector2 - Stores the relative motion of the mouse. | _physics_process(delta) - This method uses the relative motion of the mouse and input axes to move the camera accordingly. |
 
 ## Assets
-| Asset Name | Type | Description |
-|:----:|:----:|:----:|
-| Bee Model.gltf | GLTF 2.0 | Bee mesh custom made in Blender 3.6. |
-| flower.gltf | GLTF 2.0 | Flower mesh custom made in Blender 3.6. |
-| Hive Model.gltf | GLTF 2.0 | Hive mesh custom made in Blender 3.6. |
-| HoneyHiveMusic.mp3 | MP3 | Background music sampled from the game Super Mario Galaxy. |
-| sky1.png | PNG | Used as a skybox panaroma. |
+| Asset Name | Type | Description | Reference |
+|:----:|:----:|:----:| :----: |
+| Bee Model.gltf | GLTF 2.0 | Bee mesh custom made in Blender 3.6. | |
+| flower.gltf | GLTF 2.0 | Flower mesh custom made in Blender 3.6. | |
+| Hive Model.gltf | GLTF 2.0 | Hive mesh custom made in Blender 3.6. | |
+| HoneyHiveMusic.mp3 | MP3 | Background music sampled from the game Super Mario Galaxy. | [Honeyhive Galaxy Music)(https://youtu.be/_KwOh88Z-VI?si=dWQHKlkrpT146FG7) |
+| sky1.png | PNG | Used as a skybox panaroma. | [AllSky](https://github.com/rpgwhitelock/AllSkyFree_Godot) |
 
 # Team Member Contributions
 ## Luke Moss Hughes (C20487654)
@@ -215,13 +215,18 @@ Among other smaller contributions.
 ### What I Learned
 I learned a lot about Blender and Godot, and gained a more thorough understanding of boids throughout this project;
 - I learned a lot about the particle and animation systems in godot during research and development, although I did not get a chance to add bones to the bee model to allow the wings to be properly animated, as I had planned to do. I also gained further familiarity and efficiency with the godot editor in general.
-- Everything I done in Blender is newly learned, I am excited to use this when modelling for my future games.
+- Everything I did in Blender was newly learned, I am excited to use this when modelling for my future games.
 - My knowledge of boids was built throughout the year but this project gave me a proper familiarity and understanding of how boids work. I am also excited to bring this forward with me when making games as I feel the ability to implement awesome life-like behavior with simple rules is very valuable knowledge.
 
 
 ## James Clarke (C20375736)
 ### What I Did
-My main contribution was implementing the majority of the bee behavior. This includes the noise wander and arrive implementations, the logic for encountering a flower, and the wing animation.
+My main contributions are: 
+- Bee Noise Wander Behavior
+- Bee Arrive Behavior
+- Flower Attraction Logic
+- Bee state switching
+- Bee Wing Animation
 
 ### What I am Most Proud Of
 I am most proud of creating a bee creature that closely mimics the behaviors of real life bees. 
