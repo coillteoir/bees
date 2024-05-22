@@ -193,7 +193,7 @@ The angle that a bee's wings will rotate each frame is calculated based off the 
 | Bee Model.gltf | GLTF 2.0 | Bee mesh custom made in Blender 3.6. | |
 | flower.gltf | GLTF 2.0 | Flower mesh custom made in Blender 3.6. | |
 | Hive Model.gltf | GLTF 2.0 | Hive mesh custom made in Blender 3.6. | |
-| HoneyHiveMusic.mp3 | MP3 | Background music sampled from the game Super Mario Galaxy. | [Honeyhive Galaxy Music)(https://youtu.be/_KwOh88Z-VI?si=dWQHKlkrpT146FG7) |
+| HoneyHiveMusic.mp3 | MP3 | Background music sampled from the game Super Mario Galaxy. | [Honeyhive Galaxy Music](https://youtu.be/_KwOh88Z-VI?si=dWQHKlkrpT146FG7) |
 | sky1.png | PNG | Used as a skybox panaroma. | [AllSky](https://github.com/rpgwhitelock/AllSkyFree_Godot) |
 
 # Team Member Contributions
